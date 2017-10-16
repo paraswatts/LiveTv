@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { Platform, StatusBar, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { Platform,
+   StatusBar,
+    StyleSheet,
+     Text,
+      View,
+       Image,
+        Dimensions,
+         TouchableOpacity,
+          Alert,
+           BackHandler,
+           ScrollView
+           } from 'react-native';
 var { height, width } = Dimensions.get('window');
 import SplashScreen from 'react-native-smart-splash-screen'
 import Orientation from 'react-native-orientation-locker';
@@ -20,7 +31,7 @@ export default class Login extends Component {
     if (Platform.OS == "android") {
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
+     Orientation.lockToPortrait(); //this will lock the view to Portrait
 
   }
 
@@ -49,7 +60,6 @@ export default class Login extends Component {
 
 
 
-
       <Image
         source={{ uri: 'https://lh3.googleusercontent.com/-1mLJIRlQi1A/Wd73x4-WrcI/AAAAAAAAAJQ/l8r2sj9JsnQpUdqGfb7OjqqWx8DFMkE7wCK8BGAs/s512/Background.jpg' }}
         style={{
@@ -64,6 +74,7 @@ export default class Login extends Component {
           barStyle="light-content"
         />
         <View style={styles.outerView}>
+
           <Image style={{ height: 125, width: 125 }} source={require('../images/guru_logo.png')} />
           <View style={{
             alignItems: 'center',
@@ -194,10 +205,10 @@ export default class Login extends Component {
             marginTop: 10,
             color: "#FFF"
           }}>Contact Us</Text>
+
         </View>
 
       </Image>
-
 
 
     );

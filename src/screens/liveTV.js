@@ -13,6 +13,9 @@ import {
   NetInfo,
   ToastAndroid
 } from 'react-native';
+import Orientation from 'react-native-orientation-locker';
+
+import { YouTube,YouTubeStandaloneAndroid } from 'react-native-youtube';
 
 var { height, width } = Dimensions.get('window');
 
@@ -29,11 +32,13 @@ export default class LiveTV extends Component {
   });
 
   constructor(props) {
-    super(props);
+    super(props);                                           
   }
 
   componentDidMount() {
-
+  
+     Orientation.lockToPortrait(); //this will lock the view to Portrait
+   
     if (Platform.OS == "android") {
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
@@ -64,6 +69,15 @@ export default class LiveTV extends Component {
                 if(isConnected)
                 {
                   navigate('LivePage')
+  //                 YouTubeStandaloneAndroid.playVideo({
+  //                   apiKey: 'AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E',
+  //                   videoId: 'CuQMhTTQnT0',
+  //                   autoplay: true,
+  //                   lightboxMode: true,                                  
+                    
+  //                 })
+  //                   .then(() => console.log('Android Standalone Player Finished'))
+  // .catch(errorMessage => this.setState({ error: errorMessage }))
                 }
                 else{
                   ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);      }

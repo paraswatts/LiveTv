@@ -13,6 +13,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Orientation from 'react-native-orientation-locker';
 
 import YouTube from 'react-native-youtube'
 const instructions = Platform.select({
@@ -33,6 +34,11 @@ export default class VideoPlay extends Component {
       videoId: null
     }
   }
+  componentDidMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
+    
+  }
+
   render() {
     const { params } = this.props.navigation.state;
     return (

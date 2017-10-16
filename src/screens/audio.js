@@ -11,6 +11,7 @@ import {
   BackHandler,
   Platform
 } from 'react-native';
+import Orientation from 'react-native-orientation-locker';
 
 var { height, width } = Dimensions.get('window');
 
@@ -134,7 +135,8 @@ export default class AudioClass extends Component {
   }
 
   componentDidMount() {
-
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
+    
     if (Platform.OS == "android") {
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }

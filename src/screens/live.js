@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import YouTube from 'react-native-youtube'
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Orientation from 'react-native-orientation-locker';
 
 import PropTypes from 'prop-types';
 export default class LiveClass extends Component {
@@ -22,6 +23,11 @@ export default class LiveClass extends Component {
 
  
   
+  componentDidMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
+    
+                                                                                                                            
+  }
 
 
   render() {

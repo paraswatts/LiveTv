@@ -16,13 +16,17 @@ import {
   ToastAndroid,
   RefreshControl
 } from 'react-native';
+import {
+  CustomTabs,
+  ANIMATIONS_SLIDE,
+  ANIMATIONS_FADE
+} from 'react-native-custom-tabs';
+import Orientation from 'react-native-orientation-locker';
 import {Menu, MenuContext, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import Share, { ShareSheet, Button } from 'react-native-share';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
-
 var { height, width } = Dimensions.get('window');
-//import SecondPage from './second';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -33,13 +37,12 @@ const instructions = Platform.select({
 
 export default class FacebookPage extends Component {
   static navigationOptions = ({ navigation }) => ({
-
     headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
   componentDidMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
     NetInfo.isConnected.fetch().then(isConnected => { 
-
       if(isConnected)
       {
         this.getCoverPicture();
@@ -47,9 +50,7 @@ export default class FacebookPage extends Component {
       }
       else{
         ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);      }
-     });    
-    
-    
+     });     
   }
 
   constructor(props) {
@@ -93,7 +94,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=category&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({ Category: responseJson.category });
         this.getPageLocation();
       })
@@ -107,7 +107,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=website&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({ Website: responseJson.website });
         this.getPageEmail();
       })
@@ -129,12 +128,10 @@ export default class FacebookPage extends Component {
       });
   }
 
-
   getAboutPage() {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=about&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({ About: responseJson.about });
         this.getWebSiteLink();
       })
@@ -148,13 +145,10 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=fan_count&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ TotalLikes: responseJson.fan_count });
         this.getData();
       })
       .catch((error) => {
-        //this.setState({ isLoading: false });
         console.error(error);
         this.getData();
       });
@@ -164,8 +158,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421?access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ PageName: responseJson.name });
         this.getPageUsername();
       })
@@ -179,8 +171,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=cover&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ CoverPicture: responseJson.cover.source });
         this.getProfilePicture();
       })
@@ -189,12 +179,11 @@ export default class FacebookPage extends Component {
         this.getProfilePicture();
       });
   }
+
   getProfilePicture() {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=picture.type(large)&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ ProfilePicture: responseJson.picture.data.url });
         this.getPageName();
       })
@@ -208,8 +197,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=username&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ UserName: responseJson.username });
         this.getCategory();
       })
@@ -223,7 +210,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=location&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({ City: responseJson.location.city, Country: responseJson.location.country });
         this.getAboutPage();
       })
@@ -237,8 +223,6 @@ export default class FacebookPage extends Component {
     return fetch('https://graph.facebook.com/v2.10/318363321543421/?fields=emails&access_token=139003756724341|9ZrwPqUzrJWTCPGsy7--ooO13ao')
       .then((response) => response.json())
       .then((responseJson) => {
-
-
         this.setState({ Email: responseJson.emails });
         this.getTotalLikes();
       })
@@ -247,9 +231,6 @@ export default class FacebookPage extends Component {
         this.getTotalLikes();
       });
   }
-
-
-
 
   _onRefresh() {
     this.setState({ refreshing: true });
@@ -264,7 +245,6 @@ export default class FacebookPage extends Component {
     else {
       likes = itemData.item.likes.summary.total_count
     }
-
     var comments;
     if (itemData.item.comments.summary.total_count >= 1000) {
       comments = (itemData.item.comments.summary.total_count / 1000).toFixed(1) + "K"
@@ -272,7 +252,6 @@ export default class FacebookPage extends Component {
     else {
       comments = itemData.item.comments.summary.total_count
     }
-
     var shares;
     //console.log("Shares"+itemData.item.shares.count)
     if (itemData.item.shares.count >= 1000) {
@@ -292,12 +271,9 @@ export default class FacebookPage extends Component {
         url: itemData.item.attachments.data[0].url,
         subject: "Share Link" //  for email
       };
-
-
       return (
         <MenuContext style={{ flex: 1 }}>
           <View style={{ flexDirection: 'column' }}>
-
             <View style={{ flexDirection: 'row', margin: 10, justifyContent: 'center', alignItems: 'center' }}>
               <Image style={{ height: 50, width: 50, borderRadius: 25 }} source={{ uri: this.state.ProfilePicture }} />
               <View style={{ flexDirection: 'column', flex: 1, flexWrap: 'wrap' }}>
@@ -314,21 +290,16 @@ export default class FacebookPage extends Component {
                 </MenuOptions>
               </Menu>
             </View>
-
             <View>
               <Text style={{ flex: 1, flexWrap: 'wrap', margin: 10 }}>{itemData.item.message}</Text>
-
             </View>
-
-
             <FlatList
-
               horizontal
               data={itemData.item.attachments.data[0].subattachments.data}
               renderItem={(itemDataInner) => {
                 ///console.log("image album", itemDataInner.item.media.image.src)
                 return (
-                  <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
+                  <TouchableOpacity style={{ alignItems: 'center',flexDirection:'row' }} onPress={() => {
                     Linking.canOpenURL(itemDataInner.item.url).then(supported => {
                       if (supported) {
                         Linking.openURL(itemDataInner.item.url);
@@ -338,12 +309,17 @@ export default class FacebookPage extends Component {
                     });
                   }}>
                     <Image style={{ width: itemDataInner.item.media.image.width / 1.5, height: itemDataInner.item.media.image.height / 1.5, resizeMode: 'stretch' }} source={{ uri: itemDataInner.item.media.image.src }} />
+                    <View
+                          style={{
+                          width: 10,
+                          height: width,
+                          backgroundColor: 'rgba(0,0,0,0.0)'
+                         }}/>
                   </TouchableOpacity>
                 )
               }}
               keyExtractor={this._keyExtractorInner}
             />
-
             <View style={{ marginTop: 3, width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
             <View style={{ flexDirection: 'row', margin: 20, flex: 1, justifyContent: 'space-between' }}>
               <Text>{likes} people like this</Text>
@@ -351,7 +327,6 @@ export default class FacebookPage extends Component {
               <Text>{shares} shares</Text>
             </View>
             <View style={{ marginTop: 3, width: width, height: 20, backgroundColor: '#d1d1d1' }} />
-
           </View>
         </MenuContext>
       )
@@ -375,17 +350,13 @@ export default class FacebookPage extends Component {
                 <MenuTrigger >
                   <Image style={{ height: 24, width: 24 }} source={require('../images/menu.png')} />
                 </MenuTrigger>
-
                 <MenuOptions style={{padding:10,borderRadius:5}}>
                   <MenuOption  onSelect={() => Share.open(shareOptions)} text='Share' />
-
                 </MenuOptions>
               </Menu>
             </View>
             <Text style={{ flex: 1, flexWrap: 'wrap', margin: 10 }}>{itemData.item.message}</Text>
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => {
-
-
               Linking.canOpenURL(itemData.item.attachments.data[0].url).then(supported => {
                 if (supported) {
                   Linking.openURL(itemData.item.attachments.data[0].url);
@@ -397,20 +368,39 @@ export default class FacebookPage extends Component {
             }>
               <Image style={{ width: itemData.item.attachments.data[0].media.image.width / 1.5, resizeMode: 'stretch', height: itemData.item.attachments.data[0].media.image.height / 1.3 }} source={{ uri: itemData.item.attachments.data[0].media.image.src }} />
             </TouchableOpacity>
-
             <View style={{ marginTop: 3, width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
-
             <View style={{ flexDirection: 'row', margin: 20, flex: 1, justifyContent: 'space-between' }}>
               <Text>{likes} people like this</Text>
               <Text> {comments} comments</Text>
               <Text>{shares} shares</Text>
             </View>
             <View style={{ marginTop: 3, width: width, height: 20, backgroundColor: '#d1d1d1' }} />
-
           </View>
       )
     }
+  }
+  openCustomizedCustomTabs(link) {
+    console.log("passed link"+link)                                           
+    this.openGoogle({
+      toolbarColor: '#601983',
+      enableUrlBarHiding: true,                         
+      showPageTitle: true,             
+      enableDefaultShare: true,
+      animations: ANIMATIONS_FADE                       
+    },link);
+  }
 
+  openGoogle(option,link) {
+    CustomTabs.openURL(link, option).then((launched: boolean) => {
+      console.log(`Launched custom tabs: ${launched}`);
+    }).catch(err => {
+      Linking.canOpenURL(link).then(supported => {
+        if (supported) {
+          Linking.openURL(ink);
+        } else {
+        }
+      });
+    });
   }
 
   _keyExtractor = (itemData, index) => index;
@@ -452,17 +442,11 @@ export default class FacebookPage extends Component {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 10, marginRight: 10 }}>
               <TouchableOpacity onPress={() => {
-                Linking.canOpenURL(this.state.Website).then(supported => {
-                  if (supported) {
-                    Linking.openURL(this.state.Website);
-                  } else {
-                  }
-                });
+                  this.openCustomizedCustomTabs(this.state.Website)
               }} style={{ backgroundColor: '#0084FF', padding: 10, width: width / 2 - 12.5, borderRadius: 5 }}>
                 <Text style={{ color: '#FFF', textAlign: 'center' }}>WATCH VIDEO</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-
                 Linking.canOpenURL('fb://messaging/' + '318363321543421').then(supported => {
                   if (supported) {
                     Linking.openURL('fb://messaging/' + '318363321543421');
@@ -482,7 +466,6 @@ export default class FacebookPage extends Component {
                       Linking.openURL("fb://page/" + "318363321543421");
                     } else {
                       Linking.openURL(this.state.FBLink);
-
                     }
                   });
                 }}>
@@ -510,21 +493,13 @@ export default class FacebookPage extends Component {
               </View>
               <View style={{ width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
               <TouchableOpacity onPress={() => {
-
-                Linking.canOpenURL(this.state.Website).then(supported => {
-                  if (supported) {
-                    Linking.openURL(this.state.Website);
-                  } else {
-                  }
-                });
+                  this.openCustomizedCustomTabs(this.state.Website)
               }}>
                 <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, alignItems: 'center' }}>
-
                   <Image style={{ height: 16, width: 16 }} source={require('../images/web.png')} />
                   <Text style={{ textAlign: 'center', marginLeft: 10 }}>{this.state.Website}</Text>
                 </View>
               </TouchableOpacity>
-
               <View style={{ width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
               <TouchableOpacity onPress={() => {
                 var email = "mailto:?to=" + this.state.Email;
@@ -542,7 +517,6 @@ export default class FacebookPage extends Component {
                   <Text style={{ textAlign: 'center', marginLeft: 10 }}>{this.state.Email}</Text>
                 </View>
               </TouchableOpacity>
-
               <View style={{ marginTop: 3, width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
             </View>
             <View style={{ flexDirection: 'column', margin: 10 }}>
@@ -554,7 +528,6 @@ export default class FacebookPage extends Component {
             </View>
             <View style={{ marginTop: 3, width: width, height: 20, backgroundColor: '#d1d1d1' }} />
             <FlatList
-
               data={this.state.data}
               renderItem={this._renderItem}
               keyExtractor={this._keyExtractor} />

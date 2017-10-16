@@ -14,20 +14,22 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const STICKY_HEADER_HEIGHT = 50;
+import Orientation from 'react-native-orientation-locker';
 
 export default class AudioList extends Component {
-  // componentDidMount() {
+  componentDidMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
     
-  //       if (Platform.OS == "android") {
-  //         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  //       }
-  //     }
+        if (Platform.OS == "android") {
+          BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        }
+      }
     
-  //     handleBackButton = () => {
-  //       const { navigate } = this.props.navigation;
-  //       navigate()
-  //       return true;
-  //     }
+      handleBackButton = () => {
+        const { navigate } = this.props.navigation;
+        navigate()
+        return true;
+      }
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (<TouchableOpacity onPress={() => navigation.goBack()}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });

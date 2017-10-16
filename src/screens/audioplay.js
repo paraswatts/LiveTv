@@ -15,6 +15,7 @@ import Button from 'react-native-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Slider from 'react-native-slider';
 import Video from 'react-native-video';
+import Orientation from 'react-native-orientation-locker';
 
 const window = Dimensions.get('window');
 
@@ -23,6 +24,7 @@ export default class AudioPlay extends Component {
 
 
   componentDidMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
     
         if (Platform.OS == "android") {
           BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
