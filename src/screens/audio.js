@@ -180,10 +180,11 @@ export default class AudioClass extends Component {
     this.image = (
 
 
-      <Image
-        source={{ uri: 'https://lh3.googleusercontent.com/-1mLJIRlQi1A/Wd73x4-WrcI/AAAAAAAAAJQ/l8r2sj9JsnQpUdqGfb7OjqqWx8DFMkE7wCK8BGAs/s512/Background.jpg' }}
+      <View
+        
+        
         style={{
-          resizeMode: "stretch",
+          backgroundColor:'rgba(33,37,101,0.7)',
           height: height,
           width: width,
           justifyContent: "center",
@@ -194,7 +195,7 @@ export default class AudioClass extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
         />
-      </Image>
+      </View>
 
 
 
@@ -215,26 +216,21 @@ export default class AudioClass extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: '#191565',
     height: height / 2 - 75,
-    width: width - 50,
-    marginTop: 25,
-    alignItems: 'center'
-
+    width: width - 50,                                  
+    marginTop: 25,                            
+    alignItems: 'center'                                  
   },
   artistName: {
-
     color: "#FFF",
     backgroundColor: 'transparent',
     fontFamily: "Helvetica Neue",
     fontWeight: "500",
     fontSize: 18,
-
     marginTop: 5
   },
   artistSongs: {
-
-
     color: "#CCC",
     backgroundColor: 'transparent',
     fontFamily: "Helvetica Neue",

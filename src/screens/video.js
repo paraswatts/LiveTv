@@ -121,8 +121,10 @@ export default class VideoClass extends Component {
     var image = itemData.item.img;
 
     return (
+      <View style={{flexDirection:'column'}}>
       <TouchableOpacity
         style={{
+          backgroundColor:'#191565',
         flexDirection: "row",
         width: width,
         alignItems: 'center',
@@ -155,39 +157,32 @@ export default class VideoClass extends Component {
         }}></Image>
         <Text
           style={{
+            color:'#FFF',                     
           flex: 1,
           flexWrap: 'wrap',
           marginRight: 30,
-          marginLeft: 10,
+          marginLeft: 10,                                                                           
           fontSize: 18
         }}>{itemData.item.title}</Text>
       </TouchableOpacity>
-    )
+              <View style={{backgroundColor:'rgba(33,37,101,0.1)',width:width,height:10}}/>
+              </View>                               
+    )                                                                     
   }
 
-  _keyExtractor = (itemData, index) => index;
+  _keyExtractor = (itemData, index) => index;                                                           
 
   render() {
     return (
-      <View style={{
-        backgroundColor: '#A0A6A2',
-        margin: 10
-      }}>
+     <View style={{backgroundColor:'rgba(33,37,101,0.7)'}}>
         <FlatList
-          ItemSeparatorComponent={() => {
-          return (<View
-            style={{
-            marginTop: 3,
-            width: width,
-            height: 10,
-            backgroundColor: '#e7e7ed'
-          }}/>)
-        }}
+          style={{margin:10}}
           showsVerticalScrollIndicator={false}
           data={show_first}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}/>
-      </View>
+          
+          </View>
     );
   }
 }

@@ -26,16 +26,16 @@ export default class AudioPlay extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     
-        if (Platform.OS == "android") {
-          BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-        }
-      }
+      //   if (Platform.OS == "android") {
+      //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+      //   }
+      // }
                                     
-      handleBackButton = () => {
-        this.setState({ playing:!this.state.playing});
-        const { navigate } = this.props.navigation;
-        this.props.navigation.goBack();
-        return true;
+      // handleBackButton = () => {
+      //   this.setState({ playing:!this.state.playing});
+      //   const { navigate } = this.props.navigation;
+      //   this.props.navigation.goBack();
+      //   return true;                       
       }
   constructor(props) {
     super(props);
@@ -209,7 +209,7 @@ export default class AudioPlay extends Component {
 
     let shuffleButton;
     if (this.state.shuffle) {
-      shuffleButton = <Icon onPress={this.toggleShuffle.bind(this)} style={styles.shuffle} name="shuffle" size={18} color="#601983" />;
+      shuffleButton = <Icon onPress={this.toggleShuffle.bind(this)} style={styles.shuffle} name="shuffle" size={18} color="#191565" />;
     } else {
       shuffleButton = <Icon onPress={this.toggleShuffle.bind(this)} style={styles.shuffle} name="shuffle" size={18} color="#fff" />;
     }
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
 
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: 'rgba(33,37,101,0.7)',               
   },
   header: {
     marginTop: 17,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   sliderThumb: {
     width: 10,
     height: 10,
-    backgroundColor: '#601983',
+    backgroundColor: '#191565',
     borderRadius: 10 / 2,
     shadowColor: 'red',
     shadowOffset: { width: 0, height: 0 },

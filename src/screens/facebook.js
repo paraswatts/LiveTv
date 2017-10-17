@@ -382,7 +382,7 @@ export default class FacebookPage extends Component {
   openCustomizedCustomTabs(link) {
     console.log("passed link"+link)                                           
     this.openGoogle({
-      toolbarColor: '#601983',
+      toolbarColor: '#191565',
       enableUrlBarHiding: true,                         
       showPageTitle: true,             
       enableDefaultShare: true,
@@ -419,7 +419,7 @@ export default class FacebookPage extends Component {
     if (this.state.isLoading) {
       return (
         <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-          <ActivityIndicator color={'#601983'} animating={true} size={'large'} />
+          <ActivityIndicator color={'#191565'} animating={true} size={'large'} />
         </View>
       )
     }
@@ -450,9 +450,10 @@ export default class FacebookPage extends Component {
                 Linking.canOpenURL('fb://messaging/' + '318363321543421').then(supported => {
                   if (supported) {
                     Linking.openURL('fb://messaging/' + '318363321543421');
-                  } else {
+                  } else {                 
+                    ToastAndroid.show('Facebook messenger not installed !', ToastAndroid.SHORT);                         
                   }
-                });
+                });                                       
               }} style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: '#FFF', borderWidth: 1, borderColor: '#0084FF', marginLeft: 5, padding: 9, width: width / 2 - 12.5, borderRadius: 5 }}>
                 <Image source={require('../images/mess.png')} style={{ height: 16, width: 16 }}></Image>
                 <Text style={{ color: '#0084FF', textAlign: 'center', marginLeft: 10 }}>MESSAGE</Text>

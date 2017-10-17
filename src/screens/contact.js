@@ -51,10 +51,10 @@ export default class Contact extends Component {
 
     this.image = (
 
-      <Image
-        source={{ uri: 'https://lh3.googleusercontent.com/-1mLJIRlQi1A/Wd73x4-WrcI/AAAAAAAAAJQ/l8r2sj9JsnQpUdqGfb7OjqqWx8DFMkE7wCK8BGAs/s512/Background.jpg' }} style={{
-          resizeMode: "stretch",
+      <View
+        style={{                               
           height: height,
+          backgroundColor:'rgba(33,37,101,1)',
           width: width,
           alignItems: "center"
         }}>
@@ -149,7 +149,7 @@ export default class Contact extends Component {
         </View>
 
 
-      </Image>
+      </View>
 
 
 

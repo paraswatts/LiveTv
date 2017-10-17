@@ -61,21 +61,20 @@ export default class Login extends Component {
 
 
       <Image
-        source={{ uri: 'https://lh3.googleusercontent.com/-1mLJIRlQi1A/Wd73x4-WrcI/AAAAAAAAAJQ/l8r2sj9JsnQpUdqGfb7OjqqWx8DFMkE7wCK8BGAs/s512/Background.jpg' }}
+        source={{ uri: 'https://lh3.googleusercontent.com/-bHyvuO7S2D0/WeWEb_Q0_wI/AAAAAAAAAAc/KKprxCXMoAYJZTyfSlO2wl5hyEvvz7qdwCK8BGAs/s512/backroundapp.jpg' }}
         style={{
           alignItems: "center",
           justifyContent: 'center',
           resizeMode: "stretch",
-          height: height,
+          height: height-20,
           width: width,
         }} >
-        <StatusBar
-          backgroundColor="#4e0870"
+        <StatusBar                                                      
+          backgroundColor="rgba(32,36,100,1)"
           barStyle="light-content"
         />
         <View style={styles.outerView}>
-
-          <Image style={{ height: 125, width: 125 }} source={require('../images/guru_logo.png')} />
+          <Image style={{ height: 125, width: 125 }} source={require('../images/logo.png')} />
           <View style={{
             alignItems: 'center',
             marginTop: 30,
@@ -102,7 +101,7 @@ export default class Login extends Component {
                   textAlign: 'center',
                   fontSize: 20,
                   color: "#FFF"
-                }}>Live Tv</Text>
+                }}>Live TV</Text>
 
             </View>
             <View
@@ -222,11 +221,11 @@ const styles = StyleSheet.create({
   },
   outerView: {
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: 'center',                                                             
     marginTop: -25,
     height: height - 75,
-    width: width - 50,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: width - 25,
+    backgroundColor: 'rgba(32,36,100,0.5)',                                  
     borderRadius: 10
   },
   container: {

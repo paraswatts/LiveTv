@@ -37,7 +37,7 @@ const AppNavigator = StackNavigator({
         screen: LiveClass,
         navigationOptions:()=>({
             title:'Live TV',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }),
         
@@ -46,7 +46,7 @@ const AppNavigator = StackNavigator({
         screen: Contact,
         navigationOptions:()=>({
             title:'Contact Us',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -56,7 +56,7 @@ const AppNavigator = StackNavigator({
         screen: FacebookPage,
         navigationOptions:()=>({
             title:'Facebook',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -66,7 +66,7 @@ const AppNavigator = StackNavigator({
         screen: VideoClass,
         navigationOptions:()=>({
             title:'Video',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -76,7 +76,7 @@ const AppNavigator = StackNavigator({
         screen: AudioClass,
         navigationOptions:()=>({
             title:'Shabad',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -87,7 +87,7 @@ const AppNavigator = StackNavigator({
         screen: VideoPlay,
         navigationOptions:()=>({
             title:'Video',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -98,7 +98,7 @@ const AppNavigator = StackNavigator({
         screen: AudioPlay,
         navigationOptions:()=>({
             title:'Shabad Player',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -109,7 +109,7 @@ const AppNavigator = StackNavigator({
         screen: AudioList,
         navigationOptions:()=>({
             title:'Shabad List',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
@@ -120,7 +120,7 @@ const AppNavigator = StackNavigator({
         screen: LiveTV,
         navigationOptions:()=>({
             title:'Live TV',
-            headerStyle:{backgroundColor:'#601983'},
+            headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
         )
