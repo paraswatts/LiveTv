@@ -42,7 +42,7 @@ export default class LiveClass extends Component {
 
           controls={1}
           apiKey='AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E'
-          videoId={'CuQMhTTQnT0'} // The YouTube video ID
+          videoId={'wqecJ0EJuHY'} // The YouTube video ID
           play={false} // control playback of video with true/false                           
           fullscreen={true} // control whether the video should play in fullscreen or inline
           loop={true} // control whether the video should loop when ended

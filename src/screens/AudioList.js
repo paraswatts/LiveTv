@@ -112,10 +112,7 @@ const styles = StyleSheet.create({
     height: window.height - STICKY_HEADER_HEIGHT,
   },
   song: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginLeft: 20,
-    marginRight: 20,
+    padding: 10,                              
     borderBottomWidth: 1,                                   
     borderBottomColor: "#FFF",
 

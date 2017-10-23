@@ -40,7 +40,7 @@ export default class FacebookPage extends Component {
     headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
-  componentDidMount() {
+  componentWillMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     NetInfo.isConnected.fetch().then(isConnected => { 
       if(isConnected)
@@ -271,6 +271,8 @@ export default class FacebookPage extends Component {
         url: itemData.item.attachments.data[0].url,
         subject: "Share Link" //  for email
       };
+
+    
       return (
         <MenuContext style={{ flex: 1 }}>
           <View style={{ flexDirection: 'column' }}>
@@ -297,6 +299,13 @@ export default class FacebookPage extends Component {
               horizontal
               data={itemData.item.attachments.data[0].subattachments.data}
               renderItem={(itemDataInner) => {
+
+var widthFb = itemDataInner.item.media.image.width 
+var heightFb = itemDataInner.item.media.image.height
+var difference
+
+     difference = heightFb/widthFb
+
                 ///console.log("image album", itemDataInner.item.media.image.src)
                 return (
                   <TouchableOpacity style={{ alignItems: 'center',flexDirection:'row' }} onPress={() => {
@@ -308,7 +317,7 @@ export default class FacebookPage extends Component {
                       }
                     });
                   }}>
-                    <Image style={{ width: itemDataInner.item.media.image.width / 1.5, height: itemDataInner.item.media.image.height / 1.5, resizeMode: 'stretch' }} source={{ uri: itemDataInner.item.media.image.src }} />
+                    <Image style={{ width: width -20, height: (width-20)*difference, resizeMode: 'stretch' }} source={{ uri: itemDataInner.item.media.image.src }} />
                     <View
                           style={{
                           width: 10,
@@ -338,6 +347,14 @@ export default class FacebookPage extends Component {
         url: itemData.item.attachments.data[0].url,
         subject: "Share Link" //  for email
       };
+      var widthFb =itemData.item.attachments.data[0].media.image.width 
+      var heightFb =itemData.item.attachments.data[0].media.image.height
+      var difference
+     
+
+           difference = heightFb/widthFb
+           console.log(difference)
+      
       return (
           <View style={{ flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', margin: 10, justifyContent: 'center', alignItems: 'center' }}>
@@ -366,7 +383,7 @@ export default class FacebookPage extends Component {
               });
             }
             }>
-              <Image style={{ width: itemData.item.attachments.data[0].media.image.width / 1.5, resizeMode: 'stretch', height: itemData.item.attachments.data[0].media.image.height / 1.3 }} source={{ uri: itemData.item.attachments.data[0].media.image.src }} />
+              <Image style={{ width: (width-20), resizeMode: 'stretch', height: (width-20)*difference }} source={{ uri: itemData.item.attachments.data[0].media.image.src }} />
             </TouchableOpacity>
             <View style={{ marginTop: 3, width: width, height: 0.5, backgroundColor: '#d1d1d1' }} />
             <View style={{ flexDirection: 'row', margin: 20, flex: 1, justifyContent: 'space-between' }}>
