@@ -40,7 +40,7 @@ export default class FacebookPage extends Component {
     headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
-  componentWillMount() {
+  componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     NetInfo.isConnected.fetch().then(isConnected => { 
       if(isConnected)
@@ -50,9 +50,17 @@ export default class FacebookPage extends Component {
       }
       else{
         ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);      }
-     });     
+     });   
+     if (Platform.OS == "android") {
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }  
   }
+  handleBackButton = () => {
+    const { navigate } = this.props.navigation;
 
+    navigate('LoginPage')
+    return true;
+  }
   constructor(props) {
     super(props)
     this.state = {

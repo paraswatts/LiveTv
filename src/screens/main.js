@@ -18,6 +18,8 @@ import AudioPlay from './audioplay';
 import AudioList from './AudioList';
 import {StackNavigator} from 'react-navigation';
 import AudioClass from './audio';
+import GalleryView from './galleryView';
+import Gallery from './gallery';
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
@@ -120,6 +122,28 @@ const AppNavigator = StackNavigator({
         screen: LiveTV,
         navigationOptions:()=>({
             title:'Live TV',
+            headerStyle:{backgroundColor:'#191565'},
+            headerTintColor: '#FFF',
+            }
+        )
+        
+        
+    },
+    GalleryView: {
+        screen: GalleryView,
+        navigationOptions:()=>({
+            title:'Pictures',
+            headerStyle:{backgroundColor:'#191565'},
+            headerTintColor: '#FFF',
+            }
+        )
+        
+        
+    },
+    Gallery: {
+        screen: Gallery,
+        navigationOptions:()=>({
+            title:'Pictures',
             headerStyle:{backgroundColor:'#191565'},
             headerTintColor: '#FFF',
             }
