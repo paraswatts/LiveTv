@@ -33,6 +33,7 @@ import Swiper from 'react-native-swiper';
 export default class Login extends Component {
 
   componentDidMount() {
+    console.log(this.props.navigation.state.routeName);
     SplashScreen.close({ animationType: SplashScreen.animationType.fade, duration: 2000, delay: 500 })
     if (Platform.OS == "android") {
     
@@ -43,24 +44,23 @@ export default class Login extends Component {
   }
 
   componentWillUnmount() {
-    //sBackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton);
-}
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+}                                       
 
   handleBackButton = () => {
     var route = this.props.navigation.state.routeName;
     console.log("Current route"+route)              
     if (route == 'LoginPage') {
       Alert.alert(
-        'Exit APP',
+        'Exit App',
         'Want to exit?',
         [
           {
-            text: 'Yes',
-            onPress: () => BackHandler.exitApp(),
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
           },
-          { text: 'No', 
-          style: 'cancel',
-           onPress: () => console.log('Cancel Pressed') }
+          { text: 'ok', onPress: () => BackHandler.exitApp() }
         ],
         { cancelable: false }
       );
