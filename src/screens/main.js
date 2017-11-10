@@ -19,7 +19,11 @@ import AudioList from './AudioList';
 import {StackNavigator} from 'react-navigation';
 import AudioClass from './audio';
 import GalleryView from './galleryView';
+import AlbumView from './AlbumView';
 import Gallery from './gallery';
+import ImageView from './imageView';  
+import YoutubePlaylist from './youtubePlaylist'; 
+
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
@@ -148,9 +152,40 @@ const AppNavigator = StackNavigator({
             headerTintColor: '#FFF',
             }
         )
-        
-        
-    }
+    },
+    AlbumView: {
+        screen: AlbumView,
+        navigationOptions:()=>({
+
+            headerStyle:{backgroundColor:'#191565'},
+            headerTintColor: '#FFF',
+            }
+        )
+    },
+    ImageView: {
+        screen: ImageView,
+        navigationOptions:()=>({
+            title:'Image',
+            headerStyle:{backgroundColor:'#191565'},
+            headerTintColor: '#FFF',
+            }
+        )
+    },
+
+    YoutubePlaylist: {
+        screen: YoutubePlaylist,
+        navigationOptions:()=>({
+            title:'Youtube Playlists',
+            headerStyle:{backgroundColor:'#191565'},
+            headerTintColor: '#FFF',
+            }
+        )
+    },
+
+    
+
+
+    
 },
 {
     headerMode:'float',

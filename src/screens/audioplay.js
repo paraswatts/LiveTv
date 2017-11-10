@@ -26,16 +26,16 @@ export default class AudioPlay extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     
-      //   if (Platform.OS == "android") {
-      //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-      //   }
-      // }
+        if (Platform.OS == "android") {
+         // BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        }
+      }                                       
                                     
-      // handleBackButton = () => {
-      //   this.setState({ playing:!this.state.playing});
-      //   const { navigate } = this.props.navigation;
-      //   this.props.navigation.goBack();
-      //   return true;                       
+      handleBackButton = () => {
+        this.setState({ playing:!this.state.playing});
+        const { navigate } = this.props.navigation;
+        this.props.navigation.goBack();
+        return true;                       
       }
   constructor(props) {
     super(props);
@@ -238,7 +238,8 @@ export default class AudioPlay extends Component {
           source={{
             uri: image,
             width: 250,
-            height: 250
+            height: 250,
+            borderRadius:10                 
           }} />
         <Text style={styles.songTitle}>
           {songPlaying.title}

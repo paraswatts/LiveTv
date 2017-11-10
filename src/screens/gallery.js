@@ -17,7 +17,7 @@ import {
     TouchableOpacity,
     BackHandler,
     ActivityIndicator,
-    ScrollView
+    FlatList
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -28,6 +28,7 @@ const instructions = Platform.select({
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
             'u'
 });
+var Spinner = require('react-native-spinkit');
 
 var title;
 
@@ -35,13 +36,13 @@ export default class Gallery extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [],
+            categories: [],
             isLoading: true,
             title: null
         }
     }
     static navigationOptions = ({navigation}) => ({headerLeft: (
-            <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon
+            <TouchableOpacity onPress={() => navigation.navigate('LoginPage',{index:1})}><Icon
                 name='navigate-before'
                 style={{
                 marginLeft: 10
@@ -66,35 +67,54 @@ export default class Gallery extends Component {
             });
 
         if (Platform.OS == "android") {
-            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+            //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         }
     }
     handleBackButton = () => {
         const {navigate} = this.props.navigation;
 
-        navigate('LoginPage')
+        navigate('LoginPage',{index:1})
         return true;
     }
     getData() {
 
-        return fetch('https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Fparmeshar.tv%2Fmedia-rss%2F&api_key=2bfpdgwwxhiufi1jpx7xq71hvqjvcsl2aoqgz1tq&count=30').then((response) => response.json()).then((responseJson) => {
-            //console.log("response+++++++" + responseJson.items[7].description )
+        return fetch('http://parmeshar.tv/api/get_category_index/?parent=18')
+        .then((response) => response.json()).then((responseJson) => {
+            console.log("response+++++++" + responseJson.categories )
             this.setState({
-                data: responseJson.items,
+                categories: responseJson.categories,
                 isLoading: false
-            }, () => {
-                console.log(this.state.data[4].title)
-                title = this.state.data[4].title
-                console.log(title)
-
             });
-        }).catch((error) => {
+        }).catch((error) => {                                                   
 
             console.error(error);
         });
 
     }
 
+    _keyExtractor = (itemData, index) => index;                                                           
+
+    _renderItem = (itemData) => {
+        const {navigate} = this.props.navigation;
+    
+        return (
+            <View style={{flexDirection:'column'}}>
+                <TouchableOpacity style={{backgroundColor:'#191565',
+                                        width:width-40,
+                                        height:50,
+                                        marginTop:20,
+                                        marginRight:10,
+                                        marginLeft:10,
+                                        borderRadius:10}}
+                    onPress={()=>{
+                        navigate('AlbumView',{id:itemData.item.id,title:itemData.item.title})}}                        
+                >
+                    <Text style={{padding:10,fontSize:20,color:'#fff',textAlign:'center',fontWeight:'bold'}}>{itemData.item.title}</Text>
+                </TouchableOpacity>
+            </View>                               
+        )                                                                     
+      }
+    
     render() {
         const {navigate} = this.props.navigation;
         if (this.state.isLoading) {
@@ -103,157 +123,23 @@ export default class Gallery extends Component {
                     style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    flex: 1
+                    flex: 1,
+                    backgroundColor: 'rgba(33,37,101,0.7)',                                                    
                 }}>
-                    <ActivityIndicator color={'#191565'} animating={true} size={'large'}/>
+                    <Spinner                
+    size={80} type='Wave' color='rgba(33,37,101,1)}'/>
                 </View>
             )
         } else {
             console.log()
             return (
-                <ScrollView>
-                    <View style={styles.container}>
-                        <View
-                            style={styles.row}>                                                                                                                                                                                       
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[4].description})
-                                }}>
-                                    <Image style={styles.image} source={require('../images/pic.png')}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[4].title}</Text>
-                            </View>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[7].description})
-                                }}>
-                                    <Image style={styles.imageRight} source={require('../images/pic.png')}/>
-                                </TouchableOpacity>
-                                <Text style={styles.rightText}>{this.state.data[7].title}</Text>
-                            </View>
-                        </View>
-                        <View
-                            style={styles.row}>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[17].description})
-                                }}>
-
-                                    <Image style={styles.image} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/Febuary-2016-Deewan-bhawanigarh-8-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[17].title}</Text>
-                            </View>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[18].description})
-                                }}>
-                                    <Image style={styles.imageRight} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/june-diwan-raunke-kalanbadni-kalanmoga-13-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.rightText}>{this.state.data[18].title}</Text>
-                            </View>
-                        </View>
-                        <View
-                            style={styles.row}>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[19].description})
-                                }}>
-                                    <Image style={styles.image} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/april-ahmedgarh-mandiludhiana-diwan-1-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[19].title}</Text>
-                            </View>
-                            <View                                                                       
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[20].description})
-                                }}>                                                                                   
-                                    <Image style={styles.imageRight} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/10-10-2016-panjgrai-kotakpura-6-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.rightText}>{this.state.data[20].title}</Text>
-                            </View>
-                        </View>                             
-                        <View
-                            style={styles.row}>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[21].description})
-                                }}>
-                                    <Image style={styles.image} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/10-7-2016-g-sant-sagarnew-york-7-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[21].title}</Text>
-                            </View>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[22].description})
-                                }}>                                                                                   
-                                    <Image style={styles.imageRight} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/02-01-2016-saturday-diwan-1-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.rightText}>{this.state.data[22].title}</Text>
-                            </View>
-                        </View>  
-                        <View
-                            style={styles.row}>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[24].description})
-                                }}>
-                                    <Image style={styles.image} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/1-10-2016-Saturday-Samagam-Diwan-8-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[24].title}</Text>
-                            </View>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[23].description})
-                                }}>                                                                                   
-                                    <Image style={styles.imageRight} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/1-1-2015-lakhnaur-sahib-bhai-gurbaksh-singh-khalsa-3-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.rightText}>{this.state.data[23].title}</Text>
-                            </View>
-                        </View> 
-                        <View 
-                            style={styles.row}>
-                            <View style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[16].description})
-                                }}>
-                                    <Image style={styles.image} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/Deewan-April-2015-11-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text style={styles.welcome}>{this.state.data[16].title}</Text>
-                            </View>
-                            <View
-                                style={styles.column}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                    navigate('GalleryView', {images: this.state.data[15].description})
-                                }}>                                                                                   
-                                    <Image style={styles.imageRight} source={{uri:'http://parmeshar.tv/wp-content/uploads/2017/01/14-1-2015-sangrand-samagam-18-180x180.jpg'}}/>
-                                </TouchableOpacity>
-                                <Text
-                                    style={styles.rightText}>{this.state.data[15].title}</Text>
-                            </View>
-                        </View>                            
-                    </View>
-                </ScrollView>
+                <View style={styles.container}>
+                <FlatList
+                showsVerticalScrollIndicator={false}
+                data={this.state.categories}
+                renderItem={this._renderItem}
+                keyExtractor={this._keyExtractor}/>
+                </View>
             );                                          
         }
     }

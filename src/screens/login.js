@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Linking,  
   BackHandler,
   ScrollView
 } from 'react-native';
@@ -20,6 +21,12 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
       'u'
 });
+
+
+
+// screen related book keeping
+
+import Swiper from 'react-native-swiper';
 
 export default class Login extends Component {
 
@@ -45,12 +52,18 @@ export default class Login extends Component {
     ], {cancelable: false})
     return true;
   }
-
   render() {
     const {navigate} = this.props.navigation;
-
+    const {params} = this.props.navigation.state;
+    var id;
+    if(params)
+    {
+      id=  params.index;
+    }
+    else 
+      id = 0                                 
     return (
-
+      <Swiper index={id} loop={false} showsButtons={false}>                      
       <Image
         source={{
         uri: 'https://lh3.googleusercontent.com/-bHyvuO7S2D0/WeWEb_Q0_wI/AAAAAAAAAAc/KKprxCXMoAYJZTyfSlO2wl5hyEvvz7qdwCK8BGAs/s512/backroundapp.jpg'
@@ -72,8 +85,9 @@ export default class Login extends Component {
             source={require('../images/logo.png')}/>
           <View
             style={{
+              
             alignItems: 'center',
-            marginTop: 30,
+            marginTop: 70,
             flexDirection: 'row'
           }}>
             <View style={styles.column}>
@@ -87,8 +101,8 @@ export default class Login extends Component {
                   source={require('../images/live.png')}
                   style={{
                   resizeMode: "stretch",
-                  height: 75,
-                  width: 75
+                  height: 250,
+                  width: 250                  
                 }}/>
               </TouchableOpacity>
               <Text
@@ -100,43 +114,66 @@ export default class Login extends Component {
               }}>Live TV</Text>
 
             </View>
-            <View
-              style={styles.column}
-              style={{
-              marginLeft: 100
-            }}>
-              <TouchableOpacity
-                activeOpacity={.5}
-                onPress={() => {
-                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-                navigate("VideoPage")
-              }}>
-
-                <Image
-                  source={require('../images/youtube.png')}
-                  style={{
-                  marginTop: 10,
-                  resizeMode: "stretch",
-                  height: 75,
-                  width: 75
-                }}/>
-              </TouchableOpacity>
-              <Text
-                style={{
-                textAlign: 'center',
-                fontSize: 20,
-                color: "#FFF"
-              }}>Video</Text>
-            </View>
+           
           </View>
+          
+        </View>
+      </Image>
+
+            
+
+      <Image
+        source={{
+        uri: 'https://lh3.googleusercontent.com/-bHyvuO7S2D0/WeWEb_Q0_wI/AAAAAAAAAAc/KKprxCXMoAYJZTyfSlO2wl5hyEvvz7qdwCK8BGAs/s512/backroundapp.jpg'
+      }}
+        style={{
+        alignItems: "center",
+        justifyContent: 'center',
+        resizeMode: "stretch",
+        height: height - 20,
+        width: width
+      }}>
+        <StatusBar backgroundColor="rgba(32,36,100,1)" barStyle="light-content"/>
+        <View style={styles.outerView}>
+        
+          <Image
+            style={{
+            height: 125,
+            width: 125
+          }}
+            source={require('../images/logo.png')}/>
           <View
             style={{
-              marginLeft:-5,
-            flexDirection: 'row',
-            marginTop: 20
+            alignItems: 'center',
+            marginTop: 30,
+            flexDirection: 'row'
           }}>
-            <View style={styles.column}>
-              <TouchableOpacity
+            <View
+            style={styles.column}
+           >                
+
+            <TouchableOpacity
+              activeOpacity={.5}
+              onPress={() => {
+              BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+              navigate("AudioPage")
+            }}>
+              <Image
+                source={require('../images/icon.png')}
+                style={{
+                resizeMode: "stretch",
+                height: 55,
+                width: 55
+              }}/></TouchableOpacity>
+            <Text
+              style={{
+              marginTop: 10,
+              fontSize: 20,
+              color: "#FFF",
+              textAlign: 'center'
+            }}>Audio</Text>
+
+            <TouchableOpacity
                 activeOpacity={.5}
                 onPress={() => {
                 BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
@@ -145,9 +182,10 @@ export default class Login extends Component {
                 <Image
                   source={require('../images/facebook-logo.png')}
                   style={{
+                    marginTop:20,
                   resizeMode: "stretch",
-                  height: 75,
-                  width: 75
+                  height: 55,
+                  width: 55
                 }}/></TouchableOpacity>
 
               <Text
@@ -157,70 +195,71 @@ export default class Login extends Component {
                 fontSize: 20,
                 color: "#FFF"
               }}>Facebook</Text>
-
-            </View>
+          </View>
             <View
               style={styles.column}
               style={{
               marginLeft: 100
             }}>
-
               <TouchableOpacity
                 activeOpacity={.5}
                 onPress={() => {
                 BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-                navigate("AudioPage")
+                navigate("YoutubePlaylist")
               }}>
+
                 <Image
-                  source={require('../images/icon.png')}
+                  source={require('../images/youtube.png')}
                   style={{
+                                                        alignSelf:'center',
+                                                        
+                  marginTop: 10,
                   resizeMode: "stretch",
-                  height: 75,
-                  width: 75
-                }}/></TouchableOpacity>
+                  height: 55,
+                  width: 55
+                }}/>
+              </TouchableOpacity>
               <Text
                 style={{
-                marginTop: 10,
+                textAlign: 'center',
                 fontSize: 20,
-                color: "#FFF",
-                textAlign: 'center'
-              }}>Audio</Text>
-            </View>
+                color: "#FFF"
+              }}>Video</Text>
+               <TouchableOpacity                           
+              activeOpacity={.5}                                                          
+              onPress={() => {
+              BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+              navigate("Gallery")
+            }}>
+              <Image
+                source={require('../images/gallery.png')}
+                style={{
+                                    alignSelf:'center',
+                                    marginTop:20,                               
+                resizeMode: "stretch",
+                height: 55,
+                width: 55
+              }}/></TouchableOpacity>
 
+            <Text
+              style={{
+              marginTop: 10,
+              textAlign: 'center',
+              fontSize: 20,
+              color: "#FFF"
+            }}>Pictures</Text>
+            </View>
           </View>
+        
           <View
             style={{
             flexDirection: 'row',
             marginTop: 20
           }}>
-            <View style={styles.column}>
-              <TouchableOpacity                           
-                activeOpacity={.5}                                                          
-                onPress={() => {
-                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-                navigate("Gallery")
-              }}>
-                <Image
-                  source={require('../images/gallery.png')}
-                  style={{
-                  resizeMode: "stretch",
-                  height: 75,
-                  width: 75
-                }}/></TouchableOpacity>
-
-              <Text
-                style={{
-                marginTop: 10,
-                textAlign: 'center',
-                fontSize: 20,
-                color: "#FFF"
-              }}>Pictures</Text>
-
-            </View>
+            
             <View
               style={styles.column}
               style={{
-              marginLeft: 100
             }}>
 
               <TouchableOpacity
@@ -233,8 +272,9 @@ export default class Login extends Component {
                   source={require('../images/contact.png')}
                   style={{
                   resizeMode: "stretch",
-                  height: 75,
-                  width: 75
+                  height: 55,
+                  alignSelf:'center',
+                  width: 55
                 }}/></TouchableOpacity>
               <Text
                 style={{
@@ -245,8 +285,63 @@ export default class Login extends Component {
               }}>Contact</Text>
             </View>
           </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',marginTop:40}}>
+          <TouchableOpacity onPress={() => {
+            console.log("Clicked On Whatsapp");
+
+            Linking.canOpenURL('fb://page/318363321543421').then(supported => {
+              if (supported) {
+                Linking.openURL('fb://page/318363321543421');              
+              } else {
+                Linking.openURL('https://www.facebook.com/n/?parmeshardwar');
+                console.log('Don\'t know how to open URI: ' + this.props.url);
+              }
+            });
+          }
+          }>
+            <Image style={{ width: 40, height: 40 }} source={require('../images/fb.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log("Clicked On Whatsapp");
+            Linking.canOpenURL('http://instagram.com/_u/dhadrian.wale/').then(supported => {
+              if (supported) {
+                Linking.openURL('http://instagram.com/_u/dhadrian.wale/');
+              } else {
+                console.log('Don\'t know how to open URI: ' + this.props.url);
+              }
+            });
+          }}>
+            <Image style={{ width: 40, height: 40, marginLeft: 30 }} source={require('../images/insta.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log("Clicked On Whatsapp");
+            Linking.canOpenURL('http://twitter.com/parmeshar_tv/').then(supported => {
+              if (supported) {
+                Linking.openURL('http://twitter.com/parmeshar_tv/');
+              } else {
+                console.log('Don\'t know how to open URI: ' + this.props.url);
+              }
+            });
+          }}>
+            <Image style={{ width: 40, height: 40, marginLeft: 30 }} source={require('../images/tweet.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log("Clicked On Whatsapp");
+            Linking.canOpenURL("mailto:?to=emm.pee.ldh@gmail.com").then(supported => {
+              if (supported) {
+                Linking.openURL("mailto:?to=emm.pee.ldh@gmail.com");
+              } else {
+                console.log('Don\'t know how to open URI: ' + this.props.url);
+              }
+            });
+          }}>
+            <Image style={{ width: 40, height: 40, marginLeft: 30 }} source={require('../images/email.png')} />
+          </TouchableOpacity>
         </View>
+        </View>
+        
       </Image>
+      </Swiper>
 
     );
   }
@@ -258,8 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   outerView: {
-    alignItems: "center",
-    justifyContent: 'center',
+    alignItems: "center",                                       
     marginTop: -25,
     height: height - 75,
     width: width - 25,

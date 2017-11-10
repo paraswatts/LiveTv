@@ -33,7 +33,7 @@ export default class VideoPlay extends Component {
     this.state = {
       videoId: null
     }
-  }
+  }                 
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     

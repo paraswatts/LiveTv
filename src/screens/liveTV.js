@@ -32,11 +32,44 @@ export default class LiveTV extends Component {
   });
 
   constructor(props) {
-    super(props);                                           
+    super(props); 
+    this.state = {
+      attachments: [],
+      videoId:null,
+      isLoading: true
+    }                                          
   }
+
+  getData() {
+    const {params} = this.props.navigation.state;
+    return fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E&channelId=UCswIOlMY2_DT05glwBsxZyg&part=snippet,id&order=date&maxResults=50')
+    .then((response) => response.json())
+    .then((responseJson) => {                
+      console.log("response+++++++" + responseJson.items[0].id.videoId)
+        this.setState({
+          videoId: responseJson.items[0].id.videoId,
+            //attachments:responseJson.posts.attachments,                       
+            isLoading: false
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+
+} 
 
   componentDidMount() {
   
+    NetInfo
+    .isConnected
+    .fetch()
+    .then(isConnected => {
+        if (isConnected) {                                                                          
+            this.getData();
+
+        } else {
+            ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);
+        }
+    }); 
      Orientation.lockToPortrait(); //this will lock the view to Portrait
    
     if (Platform.OS == "android") {
@@ -53,6 +86,7 @@ export default class LiveTV extends Component {
 
 
   render() {
+    console.log(this.state.items)
     const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:'rgba(33,37,101,0.7)' }}>
@@ -61,7 +95,7 @@ export default class LiveTV extends Component {
                NetInfo.isConnected.fetch().then(isConnected => { 
                 if(isConnected)
                 {                                             
-                  navigate('LivePage')
+                  navigate('LivePage',{videoId:this.state.videoId})
   //                 YouTubeStandaloneAndroid.playVideo({
   //                   apiKey: 'AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E',
   //                   videoId: 'CuQMhTTQnT0',

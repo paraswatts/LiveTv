@@ -3,11 +3,12 @@ package com.gurbanitv;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
 import cl.json.RNSharePackage;
 import com.reactnativecomponent.splashscreen.RCTSplashScreenPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
-
+import com.react.rnspinkit.RNSpinkitPackage;  
 import org.wonday.orientation.OrientationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -32,13 +33,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FastImageViewPackage(),
             new CustomTabsPackage(),
           new RNSharePackage(),
           new OrientationPackage(),
           new VectorIconsPackage(),
           new ReactVideoPackage(),
           new ReactNativeYouTube(),
-          new RCTSplashScreenPackage()  
+          new RCTSplashScreenPackage(),
+          new RNSpinkitPackage()   
 
         );
     }

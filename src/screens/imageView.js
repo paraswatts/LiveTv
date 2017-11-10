@@ -33,6 +33,7 @@ import ProgressPie from 'react-native-progress/Pie';
 import { createImageProgress } from 'react-native-image-progress';
 const Image1 = createImageProgress(FastImage);
 import FastImage from 'react-native-fast-image'
+import PinchZoomView from 'react-native-pinch-zoom-view';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
@@ -40,13 +41,13 @@ const instructions = Platform.select({
             'u'
 });
 
-export default class GalleryView extends Component {
+export default class ImageView extends Component {
     constructor(props) {
         super(props)
         this.state = {
             data: [],
             isLoading: true,
-        }                                                       
+        }
     }
     static navigationOptions = ({navigation}) => ({headerLeft: (
             <TouchableOpacity onPress={() => navigation.goBack()}><Icon
@@ -59,16 +60,15 @@ export default class GalleryView extends Component {
         )});
     componentDidMount()
     {                                           
-        const {params} = this.props.navigation.state;
+        // const {params} = this.props.navigation.state;
         
-        this.setState({data:params.albumIndex},()=>{
-                
-                console.log("Gallery"+this.state.data)                                          
-        })
+        // this.setState({data:params.albumIndex},()=>{
+        //         console.log("Gallery"+this.state.data)                                          
+        // })
         if (Platform.OS == "android") {
             //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         }
-    }                                               
+    }
     handleBackButton = () => {
         const {navigate} = this.props.navigation;
         const { goBack } = this.props.navigation
@@ -81,45 +81,27 @@ export default class GalleryView extends Component {
     _keyExtractor = (itemData, index) => index;                                                           
 
     
-    _renderItem = (itemData) => {                       
-        const { navigate } = this.props.navigation;
-        if (itemData.item.url) {
-            return (
-                <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            //BackHandler.removeEventListener('hardwareBackPress');                                              
-                            navigate('ImageView', { image: itemData.item.images.medium_large.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
-                        }}
-                    >
-                        <Image1 indicator={ProgressPie}
-                            indicatorProps={{
-                                color: 'rgba(33,37,101,1)}'
-
-                            }}
-                            source={{ uri: itemData.item.images.medium.url }} style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, }} />
-                    </TouchableOpacity>
-                </View>
-            );
-        }
-                                                                          
-      }
     
     render() {
-        console.log("Page 2")   
-        const { params } = this.props.navigation.state;
-            
-            return (
-                <View style={styles.container}>
-                <FlatList
-                numColumns='2'
-                style={{ marginBottom: 10, marginLeft: 10 }}
-                showsVerticalScrollIndicator={false}
-                data={params.albumIndex}
-                renderItem={this._renderItem}
-                keyExtractor={this._keyExtractor} />
-                </View>
-            );                                         
+        console.log("Page 3")
+        const { params } = this.props.navigation.state;        
+        var widthFb = params.width
+        var heightFb = params.height
+        var difference = heightFb / widthFb
+        return (
+            <View style={styles.container} >
+                <PinchZoomView>
+                    <Image1
+                        indicator={ProgressPie}
+                        indicatorProps={{
+                            color: 'rgba(33,37,101,1)}'
+
+                        }}
+                        style={{ height: (width - 10) * difference, width: width }}
+                        source={{ uri: params.image }} />
+                </PinchZoomView>
+            </View>
+        );                                       
           
     }                                   
 }

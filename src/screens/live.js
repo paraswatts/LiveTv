@@ -17,32 +17,22 @@ import PropTypes from 'prop-types';
 export default class LiveClass extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-
     headerLeft: (<TouchableOpacity onPress={() => navigation.goBack()}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
- 
-  
   componentDidMount() {
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
-    
-                                                                                                                            
+    Orientation.lockToPortrait(); //this will lock the view to Portrait                                                                                                                         
   }
 
-
   render() {
-
-
-    
-    return (
+    const {params} = this.props.navigation.state;
+    console.log(params.videoId)
+    return (                        
       <View style={styles.container}>
-
-
         <YouTube
-
           controls={1}
           apiKey='AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E'
-          videoId={'wqecJ0EJuHY'} // The YouTube video ID
+          videoId={params.videoId} // The YouTube video ID                        
           play={false} // control playback of video with true/false                           
           fullscreen={true} // control whether the video should play in fullscreen or inline
           loop={true} // control whether the video should loop when ended

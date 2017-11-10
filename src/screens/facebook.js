@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   WebView,
   NetInfo,
+  BackHandler,
   ToastAndroid,
   RefreshControl
 } from 'react-native';
@@ -34,10 +35,11 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\n' +
   'Shake or press menu button for dev menu',
 });
+var Spinner = require('react-native-spinkit');
 
 export default class FacebookPage extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
+    headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage',{index:1})}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
   componentDidMount() {
@@ -58,7 +60,7 @@ export default class FacebookPage extends Component {
   handleBackButton = () => {
     const { navigate } = this.props.navigation;
 
-    navigate('LoginPage')
+    navigate('LoginPage',{index:1})
     return true;
   }
   constructor(props) {
@@ -443,8 +445,9 @@ var difference
 
     if (this.state.isLoading) {
       return (
-        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-          <ActivityIndicator color={'#191565'} animating={true} size={'large'} />
+        <View style={{backgroundColor: 'rgba(33,37,101,0.7)', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Spinner 
+    size={80} type='Wave' color='rgba(33,37,101,1)}'/>               
         </View>
       )
     }

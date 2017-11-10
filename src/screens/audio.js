@@ -126,7 +126,7 @@ export default class AudioClass extends Component {
 
     headerLeft: (<TouchableOpacity onPress={() => {
 
-      navigation.navigate('LoginPage')
+      navigation.navigate('LoginPage',{index:1})
     }}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
@@ -138,14 +138,14 @@ export default class AudioClass extends Component {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     
     if (Platform.OS == "android") {
-      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+      //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
   }
 
   handleBackButton = () => {
     const { navigate } = this.props.navigation;
 
-    navigate('LoginPage')
+    navigate('LoginPage',{index:1})
     return true;
   }
   _keyExtractor = (itemData, index) => index;
@@ -154,14 +154,14 @@ export default class AudioClass extends Component {
     const { navigate } = this.props.navigation;
     console.log('Image link==========' + itemData.item.background)
     return (
-
+                        
       <TouchableOpacity activeOpacity={0.5} onPress={() => {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         navigate('AudioList', { item: itemData.item })
       }} >
 
         <View style={styles.container}>
-          <Image source={{ uri: 'https://lh3.googleusercontent.com/-S-38rhqUoM8/Wdtp8-dRjUI/AAAAAAAAAHI/tE3OQa3r8wwYDQ42KVr6kd8Js-CrzLXdgCK8BGAs/s512/2017-10-09.jpg' }} style={{ marginTop: 20, resizeMode: 'stretch', height: height / 2 - 150, width: width - 150 }}></Image>
+          <Image source={{ uri: 'https://lh3.googleusercontent.com/-S-38rhqUoM8/Wdtp8-dRjUI/AAAAAAAAAHI/tE3OQa3r8wwYDQ42KVr6kd8Js-CrzLXdgCK8BGAs/s512/2017-10-09.jpg' }} style={{ marginTop: 20, resizeMode: 'stretch', height: height / 2 - 150, width: width - 150 ,borderRadius:10,}}></Image>
           <Text style={styles.artistName}>{itemData.item.name}</Text>
           <Text style={styles.artistSongs}>{itemData.item.songs.length} songs</Text>
 
@@ -216,6 +216,7 @@ export default class AudioClass extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius:10,
     backgroundColor: '#191565',
     height: height / 2 - 75,
     width: width - 50,                                  

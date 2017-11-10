@@ -14,7 +14,8 @@ import {
   TouchableOpacity,
   Dimensions,
   BackHandler,
-  Linking
+  Linking,
+  ScrollView
 } from 'react-native';
 var { height, width } = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -29,7 +30,7 @@ const instructions = Platform.select({
 export default class Contact extends Component {
   static navigationOptions = ({ navigation }) => ({
 
-    headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage')}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
+    headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage',{index:1})}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
 
@@ -43,22 +44,31 @@ export default class Contact extends Component {
   handleBackButton = () => {
     const { navigate } = this.props.navigation;
 
-    navigate('LoginPage')
+    navigate('LoginPage',{index:1})
     return true;
   }
   componentWillMount() {
+
+  
+  }
+
+  render() {
     const { navigate } = this.props.navigation;
-
-    this.image = (
-
+    
+    return (
+      <View                 
+      style={{backgroundColor: 'rgba(33,37,101,0.7)',height:height}}>
       <View
-        style={{                               
-          height: height,
+        style={{  
+          borderRadius:10,                                                                                 
+          margin:10,                                        
+          height: height - 100,                                 
           backgroundColor:'rgba(33,37,101,1)',
-          width: width,
+          width: width-20,
           alignItems: "center"
-        }}>
-
+        }}>                
+        
+                   
         <Text style={styles.welcome}>DONATE:</Text>
         <Text style={styles.text}>Acc Name: Parmeshar Dwar Charitable Trust</Text>
         <Text style={styles.text}>Bank Name: HDFC Bank Ltd.</Text>
@@ -91,76 +101,47 @@ export default class Contact extends Component {
           <Image style={{ width: 32, height: 32, marginLeft: 10 }} source={require('../images/phone-call.png')} />
           <Text style={styles.text}>EMM PEE CASSETTES</Text>
         </View>
-        <Text style={styles.text}>0175-2306224, 94643-92361, 93162-02346</Text>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30, justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => {
-            console.log("Clicked On Whatsapp");
-
-            Linking.canOpenURL('fb://page/318363321543421').then(supported => {
+        <View style={{flexDirection:'row'}}>
+        <TouchableOpacity onPress={() => {
+            console.log("Clicked On number");
+            Linking.canOpenURL("tel:+91175-2306224").then(supported => {
               if (supported) {
-                Linking.openURL('fb://page/318363321543421');               w
-              } else {
-                Linking.openURL('https://www.facebook.com/n/?parmeshardwar');
-                console.log('Don\'t know how to open URI: ' + this.props.url);
-              }
-            });
-          }
-          }>
-            <Image style={{ width: 48, height: 48 }} source={require('../images/fb.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            console.log("Clicked On Whatsapp");
-            Linking.canOpenURL('http://instagram.com/_u/dhadrian.wale/').then(supported => {
-              if (supported) {
-                Linking.openURL('http://instagram.com/_u/dhadrian.wale/');
+                Linking.openURL("tel:+91175-2306224");
               } else {
                 console.log('Don\'t know how to open URI: ' + this.props.url);
               }
             });
           }}>
-            <Image style={{ width: 48, height: 48, marginLeft: 30 }} source={require('../images/insta.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            console.log("Clicked On Whatsapp");
-            Linking.canOpenURL('http://twitter.com/parmeshar_tv/').then(supported => {
+        <Text style={styles.text}>0175-2306224</Text> 
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+            console.log("Clicked On number");
+            Linking.canOpenURL("tel:+919464392361").then(supported => {
               if (supported) {
-                Linking.openURL('http://twitter.com/parmeshar_tv/');
+                Linking.openURL("tel:+919464392361");
               } else {
                 console.log('Don\'t know how to open URI: ' + this.props.url);
               }
             });
           }}>
-            <Image style={{ width: 48, height: 48, marginLeft: 30 }} source={require('../images/tweet.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            console.log("Clicked On Whatsapp");
-            Linking.canOpenURL("mailto:?to=emm.pee.ldh@gmail.com").then(supported => {
+        <Text style={styles.text}>94643-92361</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+            console.log("Clicked On number");                       
+            Linking.canOpenURL("tel:+919316202346").then(supported => {
               if (supported) {
-                Linking.openURL("mailto:?to=emm.pee.ldh@gmail.com");
+                Linking.openURL("tel:+919316202346");
               } else {
                 console.log('Don\'t know how to open URI: ' + this.props.url);
               }
             });
           }}>
-            <Image style={{ width: 48, height: 48, marginLeft: 30 }} source={require('../images/email.png')} />
-          </TouchableOpacity>
-
+        <Text style={styles.text}>93162-02346</Text>
+        </TouchableOpacity>
         </View>
 
-
-      </View>
-
-
-
-    );
-  }
-
-  render() {
-    return (
-      <View>
-        {this.image}
-      </View>
+       </View>
+        </View>
     );
   }
 }
@@ -180,11 +161,11 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    marginRight: 5,
+    marginRight: 15,
     fontSize: 15,
     marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 5,
+    marginBottom: 10,
+    marginLeft: 15,
     color: "#fff"
   },
   instructions: {
