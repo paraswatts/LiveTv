@@ -55,9 +55,7 @@ export default class VideoClass extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
 
-    if (Platform.OS == "android") {
-      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
+   
 
     NetInfo
       .isConnected
@@ -157,11 +155,7 @@ export default class VideoClass extends Component {
   }
 
 
-  handleBackButton = () => {
-    const { navigate } = this.props.navigation;
-    navigate('YoutubePlaylist')
-    return true;
-  }
+ 
   _renderItem = (itemData) => {
     console.log("VideoId==============" + itemData.item.snippet)
     const { navigate } = this.props.navigation;

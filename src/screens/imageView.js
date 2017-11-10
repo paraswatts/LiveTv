@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Platform,
     StyleSheet,
@@ -26,19 +26,19 @@ import {
     CustomTabs,
     ANIMATIONS_SLIDE,
     ANIMATIONS_FADE
-  } from 'react-native-custom-tabs';
-var {height, width} = Dimensions.get('window');
+} from 'react-native-custom-tabs';
+var { height, width } = Dimensions.get('window');
 import ProgressPie from 'react-native-progress/Pie';
 
 import { createImageProgress } from 'react-native-image-progress';
 const Image1 = createImageProgress(FastImage);
 import FastImage from 'react-native-fast-image'
-import PinchZoomView from 'react-native-pinch-zoom-view';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
-            'u'
+    'u'
 });
 
 export default class ImageView extends Component {
@@ -49,48 +49,39 @@ export default class ImageView extends Component {
             isLoading: true,
         }
     }
-    static navigationOptions = ({navigation}) => ({headerLeft: (
+    static navigationOptions = ({ navigation }) => ({
+        headerLeft: (
             <TouchableOpacity onPress={() => navigation.goBack()}><Icon
                 name='navigate-before'
                 style={{
-                marginLeft: 10
-            }}
+                    marginLeft: 10
+                }}
                 size={40}
-                color={'white'}/></TouchableOpacity>
-        )});
-    componentDidMount()
-    {                                           
-        // const {params} = this.props.navigation.state;
-        
-        // this.setState({data:params.albumIndex},()=>{
-        //         console.log("Gallery"+this.state.data)                                          
-        // })
-        if (Platform.OS == "android") {
-            //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-        }
-    }
-    handleBackButton = () => {
-        const {navigate} = this.props.navigation;
-        const { goBack } = this.props.navigation
-        
-        goBack();
-        return true;
-    }
-    
+                color={'white'} /></TouchableOpacity>
+        )
+    });
+    componentDidMount() {
 
-    _keyExtractor = (itemData, index) => index;                                                           
+    }
 
-    
-    
+
+
+    _keyExtractor = (itemData, index) => index;
+
+
+
     render() {
         console.log("Page 3")
-        const { params } = this.props.navigation.state;        
+        const { params } = this.props.navigation.state;
         var widthFb = params.width
         var heightFb = params.height
         var difference = heightFb / widthFb
         return (
             <View style={styles.container} >
-                <PinchZoomView>
+                <ImageZoom cropWidth={Dimensions.get('window').width}
+                    cropHeight={Dimensions.get('window').height}
+                    imageWidth={width}
+                    imageHeight={(width - 10) * difference}>
                     <Image1
                         indicator={ProgressPie}
                         indicatorProps={{
@@ -99,17 +90,18 @@ export default class ImageView extends Component {
                         }}
                         style={{ height: (width - 10) * difference, width: width }}
                         source={{ uri: params.image }} />
-                </PinchZoomView>
+                </ImageZoom>
             </View>
-        );                                       
-          
-    }                                   
+        );
+
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'rgba(33,37,101,0.7)',
+        justifyContent: 'center'
     },
     welcome: {
         fontSize: 20,

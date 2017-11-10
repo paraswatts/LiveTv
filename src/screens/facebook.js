@@ -447,7 +447,7 @@ var difference
       return (
         <View style={{backgroundColor: 'rgba(33,37,101,0.7)', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
           <Spinner 
-    size={80} type='Wave' color='rgba(33,37,101,1)}'/>               
+    type='Wave' color='rgba(33,37,101,1)}'/>               
         </View>
       )
     }

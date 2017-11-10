@@ -66,9 +66,7 @@ export default class Gallery extends Component {
                 }
             });
 
-        if (Platform.OS == "android") {
-            //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-        }
+       
     }
     handleBackButton = () => {
         const {navigate} = this.props.navigation;
@@ -127,7 +125,7 @@ export default class Gallery extends Component {
                     backgroundColor: 'rgba(33,37,101,0.7)',                                                    
                 }}>
                     <Spinner                
-    size={80} type='Wave' color='rgba(33,37,101,1)}'/>
+    type='Wave' color='rgba(33,37,101,1)}'/>
                 </View>
             )
         } else {

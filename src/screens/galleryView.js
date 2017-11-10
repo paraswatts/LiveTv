@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     Platform,
     StyleSheet,
@@ -22,22 +22,16 @@ import {
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {
-    CustomTabs,
-    ANIMATIONS_SLIDE,
-    ANIMATIONS_FADE
-  } from 'react-native-custom-tabs';
-var {height, width} = Dimensions.get('window');
-import ProgressPie from 'react-native-progress/Pie';
 
+var { height, width } = Dimensions.get('window');
+import ProgressPie from 'react-native-progress/Pie';
 import { createImageProgress } from 'react-native-image-progress';
 const Image1 = createImageProgress(FastImage);
 import FastImage from 'react-native-fast-image'
-
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
-            'u'
+    'u'
 });
 
 export default class GalleryView extends Component {
@@ -46,82 +40,65 @@ export default class GalleryView extends Component {
         this.state = {
             data: [],
             isLoading: true,
-        }                                                       
+        }
     }
-    static navigationOptions = ({navigation}) => ({headerLeft: (
+    static navigationOptions = ({ navigation }) => ({
+        headerLeft: (
             <TouchableOpacity onPress={() => navigation.goBack()}><Icon
                 name='navigate-before'
                 style={{
-                marginLeft: 10
-            }}
+                    marginLeft: 10
+                }}
                 size={40}
-                color={'white'}/></TouchableOpacity>
-        )});
-    componentDidMount()
-    {                                           
-        const {params} = this.props.navigation.state;
-        
-        this.setState({data:params.albumIndex},()=>{
-                
-                console.log("Gallery"+this.state.data)                                          
+                color={'white'} /></TouchableOpacity>
+        )
+    });
+    componentDidMount() {
+        const { params } = this.props.navigation.state;
+        this.setState({ data: params.albumIndex }, () => {
+            console.log("Gallery" + this.state.data)
         })
-        if (Platform.OS == "android") {
-            //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-        }
-    }                                               
-    handleBackButton = () => {
-        const {navigate} = this.props.navigation;
-        const { goBack } = this.props.navigation
-        
-        goBack();
-        return true;
+
     }
-    
 
-    _keyExtractor = (itemData, index) => index;                                                           
+    _keyExtractor = (itemData, index) => index;
 
-    
-    _renderItem = (itemData) => {                       
+    _renderItem = (itemData) => {
         const { navigate } = this.props.navigation;
         if (itemData.item.url) {
             return (
                 <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
                     <TouchableOpacity
                         onPress={() => {
-                            //BackHandler.removeEventListener('hardwareBackPress');                                              
                             navigate('ImageView', { image: itemData.item.images.medium_large.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
                         }}
                     >
                         <Image1 indicator={ProgressPie}
                             indicatorProps={{
                                 color: 'rgba(33,37,101,1)}'
-
                             }}
                             source={{ uri: itemData.item.images.medium.url }} style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, }} />
                     </TouchableOpacity>
                 </View>
             );
         }
-                                                                          
-      }
-    
+    }
+
     render() {
-        console.log("Page 2")   
+        console.log("Page 2")
         const { params } = this.props.navigation.state;
-            
-            return (
-                <View style={styles.container}>
+        return (
+            <View style={styles.container}>
                 <FlatList
-                numColumns='2'
-                style={{ marginBottom: 10, marginLeft: 10 }}
-                showsVerticalScrollIndicator={false}
-                data={params.albumIndex}
-                renderItem={this._renderItem}
-                keyExtractor={this._keyExtractor} />
-                </View>
-            );                                         
-          
-    }                                   
+                    numColumns='2'
+                    style={{ marginBottom: 10, marginLeft: 10 }}
+                    showsVerticalScrollIndicator={false}
+                    data={params.albumIndex}
+                    renderItem={this._renderItem}
+                    keyExtractor={this._keyExtractor} />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({

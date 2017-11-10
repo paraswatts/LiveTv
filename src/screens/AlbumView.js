@@ -29,7 +29,6 @@ import ProgressPie from 'react-native-progress/Pie';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FastImage from 'react-native-fast-image'
-import PinchZoomView from 'react-native-pinch-zoom-view';
 
 const Image1 = createImageProgress(FastImage);
 
@@ -86,9 +85,7 @@ export default class AlbumView extends Component {
     });                                                 
     componentDidMount() {
         console.log(this.props.navigation.state.params.title)
-        if (Platform.OS == "android") {
-           //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-        }
+      
 
         NetInfo
             .isConnected
@@ -101,15 +98,7 @@ export default class AlbumView extends Component {
                     ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);
                 }
             });                                     
-    }                                                           
-    handleBackButton = () => {
-      
-        const { navigate } = this.props.navigation;
-        const { goBack } = this.props.navigation
-        
-        navigate('Gallery');
-        return true;
-    }
+        }
     getData() {
 
         const { params } = this.props.navigation.state;
@@ -139,7 +128,6 @@ export default class AlbumView extends Component {
             <View style={{ flex: 1, flexDirection: 'column', marginTop: 10, borderRadius: 10 }}>
                 <TouchableOpacity style={{ width: (width * 46.5) / 100, backgroundColor: '#191565', borderRadius: 10, height: 250 }}
                     onPress={() => {
-                //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 navigate('GalleryView', { albumIndex: itemData.item.attachments})
                     }}
                 >                                       
@@ -168,7 +156,7 @@ export default class AlbumView extends Component {
                             flex: 1
                         }}>
                         <Spinner
-                            size={80} type='Wave' color='rgba(33,37,101,1)}' />
+                            type='Wave' color='rgba(33,37,101,1)}' />
                     </View>
                 )
             } else {

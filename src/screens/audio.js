@@ -137,26 +137,26 @@ export default class AudioClass extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
     
-    if (Platform.OS == "android") {
-      //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
+    // if (Platform.OS == "android") {
+    //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    // }
   }
 
-  handleBackButton = () => {
-    const { navigate } = this.props.navigation;
+  // handleBackButton = () => {
+  //   const { navigate } = this.props.navigation;
 
-    navigate('LoginPage',{index:1})
-    return true;
-  }
+  //   navigate('LoginPage',{index:1})
+  //   return true;
+  // }
   _keyExtractor = (itemData, index) => index;
 
   _renderItem = (itemData) => {
     const { navigate } = this.props.navigation;
     console.log('Image link==========' + itemData.item.background)
-    return (
+    return (        
                         
       <TouchableOpacity activeOpacity={0.5} onPress={() => {
-        //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        //BackHandler.removeEventListener('hardwareBackPress');
         navigate('AudioList', { item: itemData.item })
       }} >
 
@@ -177,12 +177,13 @@ export default class AudioClass extends Component {
 
   componentWillMount() {
 
+    // if (Platform.OS == "android") {
+    //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    // }
     this.image = (
 
 
       <View
-        
-        
         style={{
           backgroundColor:'rgba(33,37,101,0.7)',
           height: height,

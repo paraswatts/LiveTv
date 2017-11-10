@@ -25,17 +25,9 @@ export default class AudioList extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
 
-    if (Platform.OS == "android") {
-      //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
   }
 
-  // handleBackButton = () => {
-  //   this.setState({ playing:!this.state.playing});
-  //   const { navigate } = this.props.navigation;
-  //   this.props.navigation.goBack();
-  //   return true;                       
-  // }
+ 
 
   handleBackButton = () => {
     const { navigate } = this.props.navigation;

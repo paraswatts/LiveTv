@@ -9,7 +9,9 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Alert,
+  BackHandler         
 } from 'react-native';
 import Main from './src/screens/main'
 const instructions = Platform.select({
@@ -20,6 +22,29 @@ const instructions = Platform.select({
 });
 
 export default class App extends Component{
+//   componentDidMount(){
+//   if (Platform.OS == "android") {
+//     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+//   }
+// }
+
+
+
+handleBackButton = () => {
+    console.log("Show Alert!");
+    Alert.alert('Exit App', 'Exiting the application?', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      }, {
+        text: 'Yes',
+        onPress: () => BackHandler.exitApp()
+      }
+    ], { cancelable: false })
+  
+  return true;
+}
   render() {
     return (
      <Main />

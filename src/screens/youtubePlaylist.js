@@ -51,9 +51,6 @@ export default class YoutubePlaylist extends Component {
     console.log("Youtube playlist did mount")
     Orientation.lockToPortrait(); //this will lock the view to Portrait
 
-    if (Platform.OS == "android") {
-     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);                     
-    }
 
     NetInfo
     .isConnected
@@ -115,7 +112,6 @@ export default class YoutubePlaylist extends Component {
       }}
         activeOpacity={.5}
         onPress={() => {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         NetInfo
           .isConnected
           .fetch()
