@@ -37,14 +37,14 @@ export default class Login extends Component {
     SplashScreen.close({ animationType: SplashScreen.animationType.fade, duration: 2000, delay: 500 })
     if (Platform.OS == "android") {
     
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
     Orientation.lockToPortrait(); //this will lock the view to Portrait
 
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
 }                                       
 
   handleBackButton = () => {
