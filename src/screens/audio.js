@@ -12,9 +12,7 @@ import {
   Platform
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
-
 var { height, width } = Dimensions.get('window');
-
 const Artists = [
   {
     name: "Samagam List 1",
@@ -122,94 +120,68 @@ const Artists = [
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class AudioClass extends Component {
+
   static navigationOptions = ({ navigation }) => ({
-
     headerLeft: (<TouchableOpacity onPress={() => {
-
-      navigation.navigate('LoginPage',{index:1})
+      navigation.navigate('LoginPage', { index: 1 })
     }}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
   }
 
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
-    
-    // if (Platform.OS == "android") {
-    //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    // }
   }
 
-  // handleBackButton = () => {
-  //   const { navigate } = this.props.navigation;
-
-  //   navigate('LoginPage',{index:1})
-  //   return true;
-  // }
   _keyExtractor = (itemData, index) => index;
 
   _renderItem = (itemData) => {
     const { navigate } = this.props.navigation;
-    console.log('Image link==========' + itemData.item.background)
-    return (        
-                        
-      <TouchableOpacity activeOpacity={0.5} onPress={() => {
-        //BackHandler.removeEventListener('hardwareBackPress');
+    return (
+      <TouchableOpacity style={{elevation:10}} activeOpacity={0.5} onPress={() => {
         navigate('AudioList', { item: itemData.item })
       }} >
-
         <View style={styles.container}>
-          <Image source={{ uri: 'https://lh3.googleusercontent.com/-S-38rhqUoM8/Wdtp8-dRjUI/AAAAAAAAAHI/tE3OQa3r8wwYDQ42KVr6kd8Js-CrzLXdgCK8BGAs/s512/2017-10-09.jpg' }} style={{ marginTop: 20, resizeMode: 'stretch', height: height / 2 - 150, width: width - 150 ,borderRadius:10,}}></Image>
+          <Image source={{ uri: 'https://lh3.googleusercontent.com/-S-38rhqUoM8/Wdtp8-dRjUI/AAAAAAAAAHI/tE3OQa3r8wwYDQ42KVr6kd8Js-CrzLXdgCK8BGAs/s512/2017-10-09.jpg' }} style={{ marginTop: 20, resizeMode: 'stretch', height: height / 2 - 150, width: width - 150, borderRadius: 10, }}></Image>
           <Text style={styles.artistName}>{itemData.item.name}</Text>
           <Text style={styles.artistSongs}>{itemData.item.songs.length} songs</Text>
-
         </View>
-
-
-
-
       </TouchableOpacity>
     )
   }
 
-
-  componentWillMount() {
-
-    // if (Platform.OS == "android") {
-    //   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    // }
-    this.image = (
-
-
-      <View
-        style={{
-          backgroundColor:'rgba(33,37,101,0.7)',
-          height: height,
-          width: width,
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-        <FlatList
-          data={Artists}
-          keyExtractor={this._keyExtractor}
-          renderItem={this._renderItem}
-        />
-      </View>
-
-
-
-
-
-    );
-  }
-
   render() {
-    console.log('==============Hello===============' + Artists);
     return (
       <View>
-        {this.image}
+        <View
+          style={{
+            backgroundColor: 'rgba(33,37,101,0.7)',
+            height: height,
+            width: width,
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+          <FlatList
+            data={Artists}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+          />
+        </View>
       </View>
     );
   }
@@ -217,12 +189,12 @@ export default class AudioClass extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius:10,
+    borderRadius: 10,
     backgroundColor: '#191565',
     height: height / 2 - 75,
-    width: width - 50,                                  
-    marginTop: 25,                            
-    alignItems: 'center'                                  
+    width: width - 50,
+    marginTop: 25,
+    alignItems: 'center'
   },
   artistName: {
     color: "#FFF",

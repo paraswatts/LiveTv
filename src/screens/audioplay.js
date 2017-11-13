@@ -1,35 +1,30 @@
 import React, { Component } from 'react';
-import { ToastAndroid,
+import {
   BackHandler,
   NetInfo,
   Platform,
-  AppRegistry, 
-  StyleSheet, 
-  Text, 
-  View, 
-  Dimensions, 
-  Image, 
-  TouchableOpacity 
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import Button from 'react-native-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Slider from 'react-native-slider';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-
 const window = Dimensions.get('window');
+import Toast from 'react-native-simple-toast';
 
 export default class AudioPlay extends Component {
 
-
-
   componentDidMount() {
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
-    
-       
-      }                                       
-                                    
-     
+    Orientation.lockToPortrait();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,36 +35,45 @@ export default class AudioPlay extends Component {
       currentTime: 0,
       songIndex: 0,
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => ({
-
-    headerLeft: (<TouchableOpacity onPress={() => { 
-
-    navigation.goBack();}}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
+    headerLeft: (<TouchableOpacity onPress={() => {
+      navigation.goBack();
+    }}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
 
- 
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
+  }
 
   componentWillMount() {
-    { this._SongIndex() }
+    {
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+      this._SongIndex()
+    }
   }
+
   _SongIndex() {
     const { params } = this.props.navigation.state;
-    console.log("========InDex==========" + params.songIndex)
     return (
       this.setState({ songIndex: params.songIndex })
     )
   }
+
   togglePlay() {
-    NetInfo.isConnected.fetch().then(isConnected => { 
-      if(isConnected){
-        this.setState({ playing: !this.state.playing });        
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected) {
+        this.setState({ playing: !this.state.playing });
       }
-      else
-      {
-        ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT); 
+      else {
+        Toast.show('Oops no internet connection !', Toast.LONG);
       }
     });
   }
@@ -83,10 +87,8 @@ export default class AudioPlay extends Component {
   }
 
   goBackward() {
-
-
-    NetInfo.isConnected.fetch().then(isConnected => { 
-      if(isConnected){
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected) {
         if (this.state.currentTime < 3 && this.state.songIndex !== 0) {
           this.setState({
             songIndex: this.state.songIndex - 1,
@@ -97,40 +99,31 @@ export default class AudioPlay extends Component {
           this.setState({
             currentTime: 0,
           });
-        }      }
-      else
-      {
-        ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT); 
+        }
+      }
+      else {
+        Toast.show('Oops no internet connection !', Toast.LONG);
       }
     });
-
-
-  
   }
 
   goForward() {
-
-    NetInfo.isConnected.fetch().then(isConnected => { 
-      if(isConnected){
-         
-    this.setState({
-      songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
-      currentTime: 0,
-    });
-    this.refs.audio.seek(0);     
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected) {
+        this.setState({
+          songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
+          currentTime: 0,
+        });
+        this.refs.audio.seek(0);
       }
-      else
-      {
-        ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT); 
+      else {
+        Toast.show('Oops no internet connection !', Toast.LONG);
       }
     });
-
-   
   }
 
   randomSongIndex() {
     const { params } = this.props.navigation.state;
-    
     let maxIndex = params.songs.length - 1;
     return Math.floor(Math.random() * (maxIndex - 0 + 1)) + 0;
   }
@@ -142,7 +135,6 @@ export default class AudioPlay extends Component {
   }
 
   onLoad(params) {
-    console.log("========DuratIon==========" + params.duration)
     this.setState({ songDuration: params.duration });
   }
 
@@ -158,20 +150,15 @@ export default class AudioPlay extends Component {
   onSlidingComplete() {
     this.refs.audio.seek(this.state.currentTime);
     this.setState({ sliding: false });
-  }                                         
+  }
 
   onEnd() {
     this.setState({ playing: false });
   }
 
-  render() {                              
+  render() {
     const { params } = this.props.navigation.state;
     let songPlaying = params.item.songs[this.state.songIndex];
-    console.log("++++++++++Image++++++++=" + params.item.background)
-    console.log("=======SongList=========" + params.item.songs)
-    console.log("+++++++++++SOng++++++++=" + songPlaying.url)
-    console.log("++++++++++Title++++++++=" + songPlaying.title)
-    console.log("++++++++++Album++++++++=" + songPlaying.album)
     let songPercentage;
     if (this.state.songDuration !== undefined) {
       songPercentage = this.state.currentTime / this.state.songDuration;
@@ -192,7 +179,7 @@ export default class AudioPlay extends Component {
     } else {
       forwardButton = <Icon onPress={this.goForward.bind(this)} style={styles.forward} name="skip-next" size={25} color="#fff" />;
     }
-                                                  
+
     let volumeButton;
     if (this.state.muted) {
       volumeButton = <Icon onPress={this.toggleVolume.bind(this)} style={styles.volume} name="volume-off" size={18} color="#fff" />;
@@ -232,7 +219,7 @@ export default class AudioPlay extends Component {
             uri: image,
             width: 250,
             height: 250,
-            borderRadius:10                 
+            borderRadius: 10
           }} />
         <Text style={styles.songTitle}>
           {songPlaying.title}
@@ -273,7 +260,7 @@ const styles = StyleSheet.create({
 
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'rgba(33,37,101,0.7)',               
+    backgroundColor: 'rgba(33,37,101,0.7)',
   },
   header: {
     marginTop: 17,

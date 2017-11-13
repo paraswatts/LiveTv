@@ -12,7 +12,6 @@ import {
 import YouTube from 'react-native-youtube'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Orientation from 'react-native-orientation-locker';
-
 import PropTypes from 'prop-types';
 export default class LiveClass extends Component {
 
@@ -25,9 +24,8 @@ export default class LiveClass extends Component {
   }
 
   render() {
-    const {params} = this.props.navigation.state;
-    console.log(params.videoId)
-    return (                        
+    const { params } = this.props.navigation.state;
+    return (
       <View style={styles.container}>
         <YouTube
           controls={1}
@@ -40,10 +38,9 @@ export default class LiveClass extends Component {
           onChangeState={e => this.setState({ status: e.state })}
           onChangeQuality={e => this.setState({ quality: e.quality })}
           onError={e => this.setState({ error: e.error })}
-          style={{ alignSelf: 'stretch' ,height:250,left:0,top:0,bottom:0,right:1}}                                                
+          style={{ alignSelf: 'stretch', height: 250, left: 0, top: 0, bottom: 0, right: 1 }}
           modestbranding={true}
         />
-
       </View>
     );
   }
@@ -60,14 +57,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
- 
+
   instructions: {
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
   },
 
-	containerAndroidFix: {
-		marginBottom: 0.1
-	}
+  containerAndroidFix: {
+    marginBottom: 0.1
+  }
 });

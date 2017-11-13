@@ -17,11 +17,11 @@ import {
     BackHandler,
     Dimensions,
     ActivityIndicator,
-    ToastAndroid,
     FlatList
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-simple-toast';
 import {
     CustomTabs,
     ANIMATIONS_SLIDE,
@@ -29,12 +29,10 @@ import {
 } from 'react-native-custom-tabs';
 var { height, width } = Dimensions.get('window');
 import ProgressPie from 'react-native-progress/Pie';
-
 import { createImageProgress } from 'react-native-image-progress';
 const Image1 = createImageProgress(FastImage);
 import FastImage from 'react-native-fast-image'
 import ImageZoom from 'react-native-image-pan-zoom';
-
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
@@ -48,6 +46,7 @@ export default class ImageView extends Component {
             data: [],
             isLoading: true,
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     static navigationOptions = ({ navigation }) => ({
         headerLeft: (
@@ -60,40 +59,50 @@ export default class ImageView extends Component {
                 color={'white'} /></TouchableOpacity>
         )
     });
-    componentDidMount() {
 
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
 
     _keyExtractor = (itemData, index) => index;
 
-
-
     render() {
-        console.log("Page 3")
-        const { params } = this.props.navigation.state;
-        var widthFb = params.width
-        var heightFb = params.height
-        var difference = heightFb / widthFb
-        return (
-            <View style={styles.container} >
-                <ImageZoom cropWidth={Dimensions.get('window').width}
-                    cropHeight={Dimensions.get('window').height}
-                    imageWidth={width}
-                    imageHeight={(width - 10) * difference}>
-                    <Image1
-                        indicator={ProgressPie}
-                        indicatorProps={{
-                            color: 'rgba(33,37,101,1)}'
+        try {
+            console.log("Page 3")
+            const { params } = this.props.navigation.state;
+            var widthFb = params.width
+            var heightFb = params.height
+            var difference = heightFb / widthFb
+            return (
+                <View style={styles.container} >
+                    <ImageZoom cropWidth={Dimensions.get('window').width}
+                        cropHeight={Dimensions.get('window').height}
+                        imageWidth={width}
+                        imageHeight={(width - 10) * difference}>
+                        <Image1
+                            indicator={ProgressPie}
+                            indicatorProps={{
+                                color: 'rgba(33,37,101,1)}'
 
-                        }}
-                        style={{ height: (width - 10) * difference, width: width }}
-                        source={{ uri: params.image }} />
-                </ImageZoom>
-            </View>
-        );
-
+                            }}
+                            style={{ height: (width - 10) * difference, width: width }}
+                            source={{ uri: params.image }} />
+                    </ImageZoom>
+                </View>
+            );
+        }
+        catch (error) {
+            Toast.show('error fetching data', Toast.LONG);
+        }
     }
 }
 

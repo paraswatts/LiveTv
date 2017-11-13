@@ -12,7 +12,6 @@ import {
   TouchableHighlight
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 const STICKY_HEADER_HEIGHT = 50;
 import Orientation from 'react-native-orientation-locker';
 
@@ -24,17 +23,32 @@ export default class AudioList extends Component {
 
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
-
   }
 
- 
+  constructor(props) {
+    super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
 
   handleBackButton = () => {
     const { navigate } = this.props.navigation;
     navigate('AudioPage');
-
     return true;
   }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
@@ -47,11 +61,9 @@ export default class AudioList extends Component {
             style={{ height: 100, width: 100 }}
             source={{ uri: params.item.background }}></Image>
           <TouchableHighlight style={styles.playButton} onPress={() => {
-            //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
             navigate('AudioPlay', { songIndex: 0, item: params.item, songs: params.item.songs, image: params.item.background, artist: params.item })
           }}>
             <Text
-
               style={styles.playButtonText}>
               PLAY
           </Text>
@@ -63,8 +75,8 @@ export default class AudioList extends Component {
             style={styles.songsList}
             renderRow={(song, sectionId, rowId) => (
               <TouchableHighlight onPress={() => {
-                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);                
-                navigate('AudioPlay', { songIndex: parseInt(rowId), item: params.item, songs: params.item.songs, image: params.item.background, artist: params.item })}}>
+                navigate('AudioPlay', { songIndex: parseInt(rowId), item: params.item, songs: params.item.songs, image: params.item.background, artist: params.item })
+              }}>
                 <View key={song} style={styles.song}>
                   <Text style={styles.songTitle}>
                     {song.title}

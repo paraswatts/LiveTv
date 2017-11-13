@@ -17,11 +17,11 @@ import {
     BackHandler,
     Dimensions,
     ActivityIndicator,
-    ToastAndroid,
     FlatList
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-simple-toast';
 
 var { height, width } = Dimensions.get('window');
 import ProgressPie from 'react-native-progress/Pie';
@@ -41,6 +41,7 @@ export default class GalleryView extends Component {
             data: [],
             isLoading: true,
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     static navigationOptions = ({ navigation }) => ({
         headerLeft: (
@@ -53,39 +54,54 @@ export default class GalleryView extends Component {
                 color={'white'} /></TouchableOpacity>
         )
     });
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+
     componentDidMount() {
         const { params } = this.props.navigation.state;
-        this.setState({ data: params.albumIndex }, () => {
-            console.log("Gallery" + this.state.data)
-        })
-
+        this.setState({ data: params.albumIndex })
     }
 
     _keyExtractor = (itemData, index) => index;
 
     _renderItem = (itemData) => {
-        const { navigate } = this.props.navigation;
-        if (itemData.item.url) {
-            return (
-                <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigate('ImageView', { image: itemData.item.images.medium_large.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
-                        }}
-                    >
-                        <Image1 indicator={ProgressPie}
-                            indicatorProps={{
-                                color: 'rgba(33,37,101,1)}'
+        try {
+            const { navigate } = this.props.navigation;
+            if (itemData.item.url) {
+                return (
+                    <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigate('ImageView', { image: itemData.item.images.medium_large.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
                             }}
-                            source={{ uri: itemData.item.images.medium.url }} style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, }} />
-                    </TouchableOpacity>
-                </View>
-            );
+                        >
+                            <Image1 indicator={ProgressPie}
+                                indicatorProps={{
+                                    color: 'rgba(33,37,101,1)}'
+                                }}
+                                source={{ uri: itemData.item.images.square.url }} style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, }} />
+                        </TouchableOpacity>
+                    </View>
+                );
+            }
+        }
+        catch (error) {
+            Toast.show('error fetching data', Toast.LONG);
         }
     }
 
     render() {
-        console.log("Page 2")
         const { params } = this.props.navigation.state;
         return (
             <View style={styles.container}>

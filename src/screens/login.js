@@ -11,10 +11,12 @@ import {
   Alert,
   Linking,
   BackHandler,
-  ScrollView
+  ScrollView,
+  AppState,
+  NetInfo
 } from 'react-native';
-import AndroidBackButton from "react-native-android-back-button"
 
+import Toast from 'react-native-simple-toast';
 var { height, width } = Dimensions.get('window');
 import SplashScreen from 'react-native-smart-splash-screen'
 import Orientation from 'react-native-orientation-locker';
@@ -23,51 +25,66 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
   'u'
 });
-
-
-
-// screen related book keeping
-
 import Swiper from 'react-native-swiper';
 
 export default class Login extends Component {
 
-  componentDidMount() {
-    console.log(this.props.navigation.state.routeName);
-    SplashScreen.close({ animationType: SplashScreen.animationType.fade, duration: 2000, delay: 500 })
-    if (Platform.OS == "android") {
-    
-    //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  constructor(props) {
+    super(props)
+    this.state = {
+      appState: AppState.currentState,
     }
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
-
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
+
+  componentWillMount() {
+    NetInfo
+      .isConnected
+      .fetch()
+      .then(isConnected => {
+        if (isConnected) {
+          SplashScreen.close({ animationType: SplashScreen.animationType.fade, duration: 2000, delay: 500 })
+        } else {
+          Toast.show('Oops no internet connection !', Toast.SHORT);
+        }
+      });
+    AppState.addEventListener('change', this._handleAppStateChange);
+    Orientation.lockToPortrait();
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
 
   componentWillUnmount() {
-    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-}                                       
-
-  handleBackButton = () => {
-    var route = this.props.navigation.state.routeName;
-    console.log("Current route"+route)              
-    if (route == 'LoginPage') {
-      Alert.alert(
-        'Exit App',
-        'Want to exit?',
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel'
-          },
-          { text: 'ok', onPress: () => BackHandler.exitApp() }
-        ],
-        { cancelable: false }
-      );
-      // return true to stop bubbling
-      return true
+    AppState.removeEventListener('change', this._handleAppStateChange);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
-}
+
+  handleBackButtonClick() {
+    Alert.alert(
+      'Exit App',
+      'Want to exit?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: 'ok', onPress: () => BackHandler.exitApp() }
+      ],
+      { cancelable: false }
+    )
+    return true
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    this.setState({ appState: nextAppState }, () => {
+      console.log("App State" + this.state.appState);
+    });
+  }
+
 
   render() {
     const { navigate } = this.props.navigation;
@@ -109,6 +126,7 @@ export default class Login extends Component {
                 <TouchableOpacity
                   activeOpacity={.5}
                   onPress={() => {
+                    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                     navigate("LiveTV")
                   }}>
                   <Image
@@ -130,9 +148,6 @@ export default class Login extends Component {
               </View>
             </View>
           </View>
-          {/* <AndroidBackButton
-            onPress={this.handleBackButton}
-          /> */}
         </Image>
 
         <Image
@@ -145,10 +160,7 @@ export default class Login extends Component {
             resizeMode: "stretch",
             height: height - 20,
             width: width
-          }}>                                                                     
-          {/* <AndroidBackButton
-            onPress={this.handleBackButton}
-          /> */}
+          }}>
           <StatusBar backgroundColor="rgba(32,36,100,1)" barStyle="light-content" />
           <View style={styles.outerView}>
             <Image
@@ -287,20 +299,20 @@ export default class Login extends Component {
                     textAlign: 'center',
                     color: "#FFF"
                   }}>Contact</Text>
-              </View>                                                               
+              </View>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center',alignSelf:'center', justifyContent: 'space-around', marginTop: 40 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', justifyContent: 'space-around', marginTop: 40 }}>
               <TouchableOpacity onPress={() => {
                 console.log("Clicked On Whatsapp");
                 Linking.canOpenURL('http://instagram.com/_u/dhadrian.wale/').then(supported => {
                   if (supported) {
                     Linking.openURL('http://instagram.com/_u/dhadrian.wale/');
                   } else {
-                    console.log('Don\'t know how to open URI: ' + this.props.url);
-                  }                                       
+                    Toast.show('No app installed to open this link', Toast.LONG);
+                  }
                 });
               }}>
-                <Image style={{ width: 40, height: 40}} source={require('../images/insta.png')} />
+                <Image style={{ width: 40, height: 40 }} source={require('../images/insta.png')} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 console.log("Clicked On Whatsapp");
@@ -308,11 +320,11 @@ export default class Login extends Component {
                   if (supported) {
                     Linking.openURL('http://twitter.com/parmeshar_tv/');
                   } else {
-                    console.log('Don\'t know how to open URI: ' + this.props.url);
+                    Toast.show('No app installed to open this link', Toast.LONG);
                   }
-                });         
+                });
               }}>
-                <Image style={{ width: 40, height: 40,marginLeft:30,marginRight:30 }} source={require('../images/tweet.png')} />
+                <Image style={{ width: 40, height: 40, marginLeft: 30, marginRight: 30 }} source={require('../images/tweet.png')} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 console.log("Clicked On Whatsapp");
@@ -320,7 +332,7 @@ export default class Login extends Component {
                   if (supported) {
                     Linking.openURL("mailto:?to=emm.pee.ldh@gmail.com");
                   } else {
-                    console.log('Don\'t know how to open URI: ' + this.props.url);
+                    Toast.show('No app installed to open this link', Toast.LONG);
                   }
                 });
               }}>
@@ -330,7 +342,6 @@ export default class Login extends Component {
           </View>
         </Image>
       </Swiper>
-
     );
   }
 }

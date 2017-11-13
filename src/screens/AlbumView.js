@@ -17,48 +17,28 @@ import {
     Dimensions,
     Image,
     ActivityIndicator,
-    ToastAndroid,
     FlatList
 } from 'react-native';
 
-
 import { createImageProgress } from 'react-native-image-progress';
 import ProgressPie from 'react-native-progress/Pie';
-
-
+import Toast from 'react-native-simple-toast';
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FastImage from 'react-native-fast-image'
-
 const Image1 = createImageProgress(FastImage);
-
 import {
     CustomTabs,
     ANIMATIONS_SLIDE,
     ANIMATIONS_FADE
 } from 'react-native-custom-tabs';
 var { height, width } = Dimensions.get('window');
-
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
     'u'
 });
 var Spinner = require('react-native-spinkit');
-
-function wp(percentage) {
-    const value = (percentage * width) / 100;
-    return Math.round(value);
-}
-
-const slideWidth = wp(75);
-const itemHorizontalMargin = wp(2);
-
-const sliderWidth = width;
-const itemWidth = slideWidth + itemHorizontalMargin * 2;
-
-
-
 
 export default class AlbumView extends Component {
     constructor(props) {
@@ -67,26 +47,39 @@ export default class AlbumView extends Component {
             attachments: [],
             posts: [],
             isLoading: true
-        }                                               
-    }                               
-    static navigationOptions = ({ navigation }) => ({ 
-        title: `${navigation.state.params.title}`,                            
+        }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+
+    static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params.title}`,
         headerLeft: (
             <TouchableOpacity onPress={() => {
-                console.log("key sa"+navigation.state.key)                   
-            navigation.goBack()}}><Icon
-                name='navigate-before'
-                style={{
-                    marginLeft: 10
-                }}
-                size={40}
-                color={'white'} /></TouchableOpacity>
+                console.log("key sa" + navigation.state.key)
+                navigation.goBack()
+            }}><Icon
+                    name='navigate-before'
+                    style={{
+                        marginLeft: 10
+                    }}
+                    size={40}
+                    color={'white'} /></TouchableOpacity>
         )
-    });                                                 
-    componentDidMount() {
-        console.log(this.props.navigation.state.params.title)
-      
+    });
 
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+    componentDidMount() {
         NetInfo
             .isConnected
             .fetch()
@@ -95,85 +88,78 @@ export default class AlbumView extends Component {
                     this.getData();
 
                 } else {
-                    ToastAndroid.show('Oops no internet connection !', ToastAndroid.SHORT);
+                    Toast.show('Oops no internet connection !', Toast.SHORT);
                 }
-            });                                     
-        }
+            });
+    }
+
     getData() {
-
         const { params } = this.props.navigation.state;
-
         return fetch('http://parmeshar.tv/api/core/get_category_posts/?category_id=' + params.id).then((response) => response.json()).then((responseJson) => {
-            console.log("response+++++++" + responseJson.posts)
             this.setState({
                 posts: responseJson.posts,
-                //attachments:responseJson.posts.attachments,                       
                 isLoading: false
             });
         }).catch((error) => {
-
-            console.error(error);
         });
-
     }
 
     _keyExtractor = (itemData, index) => index;
 
-
     _renderItem = (itemData) => {
-        const { navigate } = this.props.navigation;
-        var items = this.state.posts;
-        var index = items.indexOf(itemData.item);
-        return (
-            <View style={{ flex: 1, flexDirection: 'column', marginTop: 10, borderRadius: 10 }}>
-                <TouchableOpacity style={{ width: (width * 46.5) / 100, backgroundColor: '#191565', borderRadius: 10, height: 250 }}
-                    onPress={() => {
-                navigate('GalleryView', { albumIndex: itemData.item.attachments})
-                    }}
-                >                                       
-                    <Image                                              
-                        source={{ uri: itemData.item.attachments[0].images.medium.url }} style={{ width: (width * 46.5) / 100, height: 170, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}></Image>
-                    <Text style={{ margin: 10, fontSize: 15, color: '#fff', textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>{itemData.item.title}</Text>
-                </TouchableOpacity>
-            </View>
-        )
+        try {
+            const { navigate } = this.props.navigation;
+            var items = this.state.posts;
+            var index = items.indexOf(itemData.item);
+            return (
+                <View style={{ flex: 1, flexDirection: 'column', marginTop: 10, borderRadius: 10 }}>
+                    <TouchableOpacity style={{ width: (width * 46.5) / 100, backgroundColor: '#191565', borderRadius: 10, height: 250 }}
+                        onPress={() => {
+                            navigate('GalleryView', { albumIndex: itemData.item.attachments })
+                        }}
+                    >
+                        <Image
+                            source={{ uri: itemData.item.attachments[0].images.medium.url }} style={{ width: (width * 46.5) / 100, height: 170, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}></Image>
+                        <Text style={{ margin: 10, fontSize: 15, color: '#fff', textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>{itemData.item.title}</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+        catch (error) {
+            Toast.show('error fetching data', Toast.LONG);
+        }
     }
-                                           
 
     render() {
-        console.log(this.props.navigation.state.key);
         const { params } = this.props.navigation.state;
         const { navigate } = this.props.navigation;
-        console.log("Page 1")   
         if (this.state.isLoading) {
-
-                return (
-                    <View
-                        style={{
-                            backgroundColor: 'rgba(33,37,101,0.7)',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flex: 1
-                        }}>
-                        <Spinner
-                            type='Wave' color='rgba(33,37,101,1)}' />
-                    </View>
-                )
-            } else {
+            return (
+                <View
+                    style={{
+                        backgroundColor: 'rgba(33,37,101,0.7)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flex: 1
+                    }}>
+                    <Spinner
+                        type='Wave' color='rgba(33,37,101,1)}' />
+                </View>
+            )
+        } else {
             console.log("Page 1");
-                return (
-                    <View style={styles.container}>
-                        <FlatList
-                            numColumns='2'
-                            style={{ marginBottom: 10, marginLeft: 10 }}
-                            showsVerticalScrollIndicator={false}
-                            data={this.state.posts}
-                            renderItem={this._renderItem}
-                            keyExtractor={this._keyExtractor} />
-                    </View>
-                );
-            }
-       
+            return (
+                <View style={styles.container}>
+                    <FlatList
+                        numColumns='2'
+                        style={{ marginBottom: 10, marginLeft: 10 }}
+                        showsVerticalScrollIndicator={false}
+                        data={this.state.posts}
+                        renderItem={this._renderItem}
+                        keyExtractor={this._keyExtractor} />
+                </View>
+            );
+        }
     }
 }
 
