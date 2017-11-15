@@ -64,10 +64,9 @@ const AppNavigator = StackNavigator({
         )
 
     },
-    VideoPage: {
+    VideoPage: {                                                        
         screen: VideoClass,
         navigationOptions: () => ({
-            title: 'Video',
             headerStyle: { backgroundColor: '#191565' },
             headerTintColor: '#FFF',
         }
@@ -121,7 +120,6 @@ const AppNavigator = StackNavigator({
     GalleryView: {
         screen: GalleryView,
         navigationOptions: () => ({
-            title: 'Pictures',
             headerStyle: { backgroundColor: '#191565' },
             headerTintColor: '#FFF',
         }

@@ -38,6 +38,8 @@ export default class Login extends Component {
   }
 
   componentWillMount() {
+    console.log("height"+height+"width" + width)
+    
     NetInfo
       .isConnected
       .fetch()
@@ -165,12 +167,13 @@ export default class Login extends Component {
           <View style={styles.outerView}>
             <Image
               style={{
-                height: 125,
+                height: 125,                                    
                 width: 125
               }}
               source={require('../images/logo.png')} />
             <View
               style={{
+                justifyContent:'center',
                 alignItems: 'center',
                 marginTop: 30,
                 flexDirection: 'row'
@@ -220,29 +223,25 @@ export default class Login extends Component {
                     color: "#FFF"
                   }}>Facebook</Text>
               </View>
-              <View
-                style={styles.column}
-                style={{
-                  marginLeft: 100
-                }}>
+              <View                         
+                style={styles.column1}
+               >
                 <TouchableOpacity
                   activeOpacity={.5}
                   onPress={() => {
                     navigate("YoutubePlaylist")
                   }}>
                   <Image
-                    source={require('../images/youtube.png')}
+                    source={require('../images/youtube-logo.png')}
                     style={{
-                      alignSelf: 'center',
-
-                      marginTop: 10,
                       resizeMode: "stretch",
                       height: 55,
                       width: 55
                     }} />
                 </TouchableOpacity>
                 <Text
-                  style={{
+                  style={{    
+                    marginTop:10,                
                     textAlign: 'center',
                     fontSize: 20,
                     color: "#FFF"
@@ -255,7 +254,6 @@ export default class Login extends Component {
                   <Image
                     source={require('../images/gallery.png')}
                     style={{
-                      alignSelf: 'center',
                       marginTop: 20,
                       resizeMode: "stretch",
                       height: 55,
@@ -351,6 +349,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column'
   },
+  column1: {
+    marginLeft:100,
+    marginRight:5,
+    alignItems: 'center',
+    flexDirection: 'column'
+  },                                                              
   outerView: {
     alignItems: "center",
     marginTop: -25,

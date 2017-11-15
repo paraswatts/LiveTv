@@ -79,11 +79,39 @@ export default class Contact extends Component {
           <Text style={styles.welcome}>DONATE:</Text>
           <Text style={styles.text}>Acc Name: Parmeshar Dwar Charitable Trust</Text>
           <Text style={styles.text}>Bank Name: HDFC Bank Ltd.</Text>
-          <Text style={styles.text}>Ac No:15831450000120</Text>
+          <Text style={styles.text}>Acc No:15831450000120</Text>
           <Text style={styles.text}>IFSC:HDFC0001583</Text>
           <Text style={styles.text}>Swift Code:HDFCINBBXXX</Text>
-          <Text style={styles.text}>Bank Adress:SCO 43-44, DLF Coloney,Sirhind Road,Patiala (INDIA)</Text>
-          <Text style={styles.text}>Contact: 98726-00107, 98727-17019</Text>
+          <Text style={styles.text}>Bank Adress:SCO 43-44, DLF Coloney, Sirhind Road, Patiala (INDIA)</Text>
+
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.text}>Contact: </Text>
+       
+            <TouchableOpacity onPress={() => {
+              console.log("Clicked On number");
+              Linking.canOpenURL("tel:+919872600107").then(supported => {
+                if (supported) {
+                  Linking.openURL("tel:+919872600107");
+                } else {
+                  console.log('Don\'t know how to open URI: ' + this.props.url);
+                }
+              });
+            }}>
+              <Text style={styles.text}>98727-17019</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log("Clicked On number");
+              Linking.canOpenURL("tel:+919872717019").then(supported => {
+                if (supported) {
+                  Linking.openURL("tel:+919872717019");
+                } else {
+                  console.log('Don\'t know how to open URI: ' + this.props.url);
+                }
+              });
+            }}>
+              <Text style={styles.text}>93162-02346</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.welcome}>RECEIVE UPDATES ON WHATSAPP :</Text>
           <TouchableOpacity onPress={() => {
             var email = "whatsapp://app/9369000003";

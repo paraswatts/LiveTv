@@ -94,6 +94,7 @@ export default class YoutubePlaylist extends Component {
   _renderItem = (itemData) => {
     const { navigate } = this.props.navigation;
     try {
+
       return (
         <View style={{ height: 120, width: width - 20, marginTop: 10, flexDirection: 'column', borderRadius: 5 }}>
           <TouchableOpacity
@@ -115,19 +116,24 @@ export default class YoutubePlaylist extends Component {
                 .fetch()
                 .then(isConnected => {
                   if (isConnected) {
-                    navigate("VideoPage", {
-                      playlistId: itemData.item.id,
-                      title: itemData.item.snippet.title,
-                      itemCount: itemData.item.contentDetails.itemCount
-                    })
+                    if (itemData.item.contentDetails.itemCount > 0) {
+                      navigate("VideoPage", {
+                        playlistId: itemData.item.id,
+                        title: itemData.item.snippet.title,
+                        itemCount: itemData.item.contentDetails.itemCount,
+                      })
+                    } else {
+                      Toast.show('Playlist is empty', Toast.SHORT);
+                    }
+
                   } else {
                     Toast.show('Oops no internet connection !', Toast.SHORT);
                   }
-                });
+                });                                 
             }}>
             <Image
               style={{
-                marginLeft: 10,                                     
+                marginLeft: 10,
                 marginTop: 10,
                 marginBottom: 10,
                 height: 90,
@@ -149,50 +155,53 @@ export default class YoutubePlaylist extends Component {
           <View style={{ backgroundColor: 'rgba(33,37,101,0.1)', width: width, height: 10 }} />
         </View>
       )
-    }
-    catch (error) {
-      Toast.show('error fetching data', Toast.LONG);
-    }
+    
+  
+  }
+  catch(error) {
+    Toast.show('error fetching data', Toast.LONG);
   }
 
-  renderFooter = () => {
-    return this.state.isLoading ?
-      <View style={{ alignItems: 'center', marginTop: 10 }}><Spinner
-        size={this.state.size} type='Wave' color='rgba(33,37,101,1)}' />
-      </View> : null
-  };
+}
 
-  _keyExtractor = (itemData, index) => index;
+renderFooter = () => {
+  return this.state.isLoading ?
+    <View style={{ alignItems: 'center', marginTop: 10 }}><Spinner
+      size={this.state.size} type='Wave' color='rgba(33,37,101,1)}' />
+    </View> : null
+};
 
-  handleLoadMore = () => {
-    this.setState({ page: 'two' })
-    this.getData();
-  };
+_keyExtractor = (itemData, index) => index;
 
-  _onRefresh() {
-    this.setState({ refreshing: true });
-    this.getData();
-  }
+handleLoadMore = () => {
+  this.setState({ page: 'two' })
+  this.getData();
+};
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList
-          style={{ marginLeft: 10, marginRight: 10, marginBottom: 10 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />} style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-          data={this.state.items}
-          renderItem={this._renderItem}
-          keyExtractor={this._keyExtractor}
-          ListFooterComponent={this.renderFooter}
-        />
-      </View>
-    );
-  }
+_onRefresh() {
+  this.setState({ refreshing: true });
+  this.getData();
+}
+
+render() {
+  return (
+    <View style={styles.container}>
+      <FlatList
+        style={{ marginLeft: 10, marginRight: 10, marginBottom: 10 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />} style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+        data={this.state.items}
+        renderItem={this._renderItem}
+        keyExtractor={this._keyExtractor}
+        ListFooterComponent={this.renderFooter}
+      />
+    </View>
+  );
+}
 }
 const styles = StyleSheet.create({
   container: {

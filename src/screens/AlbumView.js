@@ -106,7 +106,7 @@ export default class AlbumView extends Component {
 
     _keyExtractor = (itemData, index) => index;
 
-    _renderItem = (itemData) => {
+    _renderItem = (itemData) => {                                               
         try {
             const { navigate } = this.props.navigation;
             var items = this.state.posts;
@@ -115,7 +115,8 @@ export default class AlbumView extends Component {
                 <View style={{ flex: 1, flexDirection: 'column', marginTop: 10, borderRadius: 10 }}>
                     <TouchableOpacity style={{ width: (width * 46.5) / 100, backgroundColor: '#191565', borderRadius: 10, height: 250 }}
                         onPress={() => {
-                            navigate('GalleryView', { albumIndex: itemData.item.attachments })
+                            console.log("Album name",itemData.item.title);
+                            navigate('GalleryView', { albumIndex: itemData.item.attachments,title:itemData.item.title })
                         }}
                     >
                         <Image

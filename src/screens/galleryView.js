@@ -19,6 +19,7 @@ import {
     ActivityIndicator,
     FlatList
 } from 'react-native';
+var Spinner = require('react-native-spinkit');
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
@@ -44,12 +45,13 @@ export default class GalleryView extends Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params.title}`,
         headerLeft: (
             <TouchableOpacity onPress={() => navigation.goBack()}><Icon
                 name='navigate-before'
                 style={{
                     marginLeft: 10
-                }}
+                }}                                                  
                 size={40}
                 color={'white'} /></TouchableOpacity>
         )
@@ -70,6 +72,7 @@ export default class GalleryView extends Component {
 
     componentDidMount() {
         const { params } = this.props.navigation.state;
+        console.log(this.props.navigation.state.params.title)
         this.setState({ data: params.albumIndex })
     }
 
@@ -80,17 +83,27 @@ export default class GalleryView extends Component {
             const { navigate } = this.props.navigation;
             if (itemData.item.url) {
                 return (
-                    <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
+                    <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 ,borderRadius:5}}>                       
                         <TouchableOpacity
+                            style={{borderRadius:5}}
                             onPress={() => {
-                                navigate('ImageView', { image: itemData.item.images.medium_large.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
+                                navigate('ImageView', { image: itemData.item.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
                             }}
-                        >
-                            <Image1 indicator={ProgressPie}
-                                indicatorProps={{
-                                    color: 'rgba(33,37,101,1)}'
+                        >                                                   
+                            <Image 
+                                onLoadEnd={()=>{
+                                       this.setState({isLoading:false},()=>{
+                                       });  
                                 }}
-                                source={{ uri: itemData.item.images.square.url }} style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, }} />
+                                source={{ uri: itemData.item.images.square.url }}
+                                style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, borderRadius:5,alignItems:'center',justifyContent:'center'}} >
+                                <ActivityIndicator 
+                                        style={{alignSelf:'center'}}
+                                        animating={this.state.isLoading}
+                                        color='#191565'
+                                        size='large' />
+                                    
+                                </Image>                                                         
                         </TouchableOpacity>
                     </View>
                 );

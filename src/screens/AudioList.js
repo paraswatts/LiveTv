@@ -30,12 +30,6 @@ export default class AudioList extends Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
-  handleBackButton = () => {
-    const { navigate } = this.props.navigation;
-    navigate('AudioPage');
-    return true;
-  }
-
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
