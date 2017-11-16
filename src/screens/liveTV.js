@@ -104,7 +104,8 @@ export default class LiveTV extends Component {
             });
           }} >
             <View style={styles.container}>
-              <Image style={{ width: width - 250, height: width - 250 }} source={require('../images/play.png')} />
+              <Image style={{ width: width - 250, height: width - 250 }} 
+              source={{uri:'https://lh3.googleusercontent.com/-NLBgjt7_TVE/WgvsyXhB7jI/AAAAAAAAAPk/ZYtlMXKcEOARTlDexaISsGNMbm3oUMRLwCK8BGAs/s256/2017-11-14.png'}} />
             </View>
           </TouchableOpacity>
         </View>
