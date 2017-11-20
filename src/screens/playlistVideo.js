@@ -20,7 +20,7 @@ import { YouTube, YouTubeStandaloneAndroid } from 'react-native-youtube';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 var { height, width } = Dimensions.get('window');
 
-export default class VideoClass extends Component {
+export default class PlaylistVideo extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.title}`,

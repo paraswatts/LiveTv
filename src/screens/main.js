@@ -11,7 +11,7 @@ import LiveClass from './live';
 import LiveTV from './liveTV';
 import Contact from './contact';
 import FacebookPage from './facebook';
-import VideoClass from './video';
+import PlaylistVideo from './playlistVideo';
 import VideoPlay from './videoplay';
 import AudioPlay from './audioplay';
 import AudioList from './AudioList';
@@ -22,7 +22,13 @@ import AlbumView from './AlbumView';
 import Gallery from './gallery';
 import ImageView from './imageView';
 import YoutubePlaylist from './youtubePlaylist';
+import VudioList from './videoList';
+import VideoHome from './videoHomePage';
+
+
+
 import getSlideFromRightTransition from 'react-navigation-slide-from-right-transition';
+
                                                         
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
@@ -64,8 +70,8 @@ const AppNavigator = StackNavigator({
         )
 
     },
-    VideoPage: {                                                        
-        screen: VideoClass,
+    PlaylistVideo: {                                                        
+        screen: PlaylistVideo,
         navigationOptions: () => ({
             headerStyle: { backgroundColor: '#191565' },
             headerTintColor: '#FFF',
@@ -153,8 +159,8 @@ const AppNavigator = StackNavigator({
         )
     },
 
-    YoutubePlaylist: {
-        screen: YoutubePlaylist,
+    VideoHome: {
+        screen: VideoHome,
         navigationOptions: () => ({
             title: 'Youtube Playlists',
             headerStyle: { backgroundColor: '#191565' },

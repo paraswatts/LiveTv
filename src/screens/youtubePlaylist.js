@@ -20,6 +20,8 @@ import { YouTube, YouTubeStandaloneAndroid } from 'react-native-youtube';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 var { height, width } = Dimensions.get('window');
 
+
+
 export default class YoutubePlaylist extends Component {
 
   static navigationOptions = ({ navigation }) => ({
@@ -117,7 +119,7 @@ export default class YoutubePlaylist extends Component {
                 .then(isConnected => {
                   if (isConnected) {
                     if (itemData.item.contentDetails.itemCount > 0) {
-                      navigate("VideoPage", {
+                      navigate("PlaylistVideo", {
                         playlistId: itemData.item.id,
                         title: itemData.item.snippet.title,
                         itemCount: itemData.item.contentDetails.itemCount,
