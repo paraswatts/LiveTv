@@ -13,6 +13,45 @@ import {
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 var { height, width } = Dimensions.get('window');
+const demoArray = [
+      {
+        title: "14 APRIL 2017 Vaisakhi Samagam (Dhadrianwale) G.Parmeshar Dwar Sahib PART – 3",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/c7w64m4irl/part_3_audio.mp3?_=1",
+      },
+      {
+        title: "14 APRIL 2017 Vaisakhi Samagam (Dhadrianwale) G.Parmeshar Dwar Sahib PART – 2",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/xdba0n11xj/part_2_audio.mp3?_=2",
+      },
+      {
+        title: "14 APRIL 2017 Vaisakhi Samagam (Dhadrianwale) G.Parmeshar Dwar Sahib PART – 1",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/gmu8xete1t/part_1_audio.mp3?_=3",
+      },
+      {
+        title: "1 FEB 2017 Tohana Haryana (Dhadrianwale) (Satgur Ki Jis Nu Matt Aave)",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/nbs0a48dac/1-2-17_Tohana_Hariyana_Satgur_Ki_Jis_Nun_Matt_Aave.mp3?_=4",
+      },
+      {
+        title: "31 JAN 2017 Tohana Haryana (Dhadrianwale) (Mohe Marna Ka Chao Hai)",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/ln9m95a7bk/31-1-17_Tohana_Hariyana_Mohe_Marne_Ka_Chao_Hai.mp3?_=5",
+      },
+      {
+        title: "30 JAN 2017 Tohana Haryana (Dhadrianwale) (Phal Tere Karma Da)",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/vnqv3jjtbx/30-1-17_Tohana_Hariyana_Phal_Tere_Karma_Da.mp3?_=6",
+      },
+      {
+        title: "25 JAN 2017 Manvi Malerkotla (Dhadrianwale) (Kabir Tu Tu Karta Tu Hua)",
+        album: "ਢੱਡਰੀਆਂ ਵਾਲੇ",
+        url: "http://k003.kiwi6.com/hotlink/8u3lqq3dva/25-1-17_Manvi_Malerkotla_Kabir_Tun_Tun_Karta_Tu_Hua.mp3?_=7",
+      },
+    ]
+  
+
 const Artists = [
   {
     name: "Samagam List 1",
@@ -147,19 +186,20 @@ export default class AudioClass extends Component {
   componentDidMount() {
     Orientation.lockToPortrait(); //this will lock the view to Portrait
   }
-
+              
   _keyExtractor = (itemData, index) => index;
-
+            
   _renderItem = (itemData) => {
     const { navigate } = this.props.navigation;
     return (
       <TouchableOpacity style={{elevation:10}} activeOpacity={0.5} onPress={() => {
-        navigate('AudioList', { item: itemData.item })
-      }} >
+        navigate('AudioList') 
+        //{ item: itemData.item })
+      }} >                    
         <View style={styles.container}>
           <Image source={{ uri: 'https://lh3.googleusercontent.com/-S-38rhqUoM8/Wdtp8-dRjUI/AAAAAAAAAHI/tE3OQa3r8wwYDQ42KVr6kd8Js-CrzLXdgCK8BGAs/s512/2017-10-09.jpg' }} style={{ marginTop: 20, resizeMode: 'stretch', height: height / 2 - 150, width: width - 150, borderRadius: 10, }}></Image>
-          <Text style={styles.artistName}>{itemData.item.name}</Text>
-          <Text style={styles.artistSongs}>{itemData.item.songs.length} songs</Text>
+          <Text style={styles.artistName}>Shabad List</Text>
+          {/* <Text style={styles.artistSongs}>{demoArray.length} songs</Text> */}
         </View>
       </TouchableOpacity>
     )
@@ -177,7 +217,7 @@ export default class AudioClass extends Component {
             alignItems: "center"
           }}>
           <FlatList
-            data={Artists}
+            data={demoArray}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
           />

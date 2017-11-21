@@ -20,13 +20,10 @@ import { YouTube, YouTubeStandaloneAndroid } from 'react-native-youtube';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 var { height, width } = Dimensions.get('window');
 
-
-
 export default class YoutubePlaylist extends Component {
-
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
-      <TouchableOpacity onPress={() => navigation.navigate('LoginPage', { index: 1 })}><Icon
+      <TouchableOpacity onPress={() => navigation.goBack(null)}><Icon
         name='navigate-before'
         style={{
           marginLeft: 10
@@ -63,7 +60,7 @@ export default class YoutubePlaylist extends Component {
   }
 
   componentDidMount() {
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
+    Orientation.lockToPortrait(); 
     NetInfo
       .isConnected
       .fetch()

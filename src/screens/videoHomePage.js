@@ -20,6 +20,7 @@ import VideoList from './videoList';
 
 
 const VideoHome = TabNavigator({
+                                            
     VideoList: {
         screen: VideoList,
         navigationOptions: () => ({
@@ -27,7 +28,7 @@ const VideoHome = TabNavigator({
           headerStyle: { backgroundColor: '#191565' },
           headerTintColor: '#FFF',
       })
-      },                            
+    },    
     YoutubePlaylist: {
       screen: YoutubePlaylist,
       navigationOptions: () => ({
@@ -35,22 +36,24 @@ const VideoHome = TabNavigator({
         headerStyle: { backgroundColor: '#191565' },
         headerTintColor: '#FFF',
     })
-    },                                                                              
+  }                                                                             
 
    
-  }, {
+  }, 
+  {
     tabBarPosition: 'top',
-    animationEnabled: true,                 
+    animationEnabled: true,  
+    backBehavior:'none',               
     tabBarOptions: {
+      activeBackgroundColor:'#ffffff',
         activeTintColor: '#ffffff',
-        inactiveTintColor: '#ffffff',
-        
+        inactiveTintColor: '#c8cace',
         showIcon: false,
         scrollEnabled:true,
-        indicatorStyle: {
+        indicatorStyle: {                                 
           borderBottomColor: '#191565',
           borderBottomWidth: 4,
-        },
+        },                            
         pressColor:'rgba(33,37,101,0.7)',                       
         labelStyle:{                                       
           fontSize: 12,
@@ -61,8 +64,7 @@ const VideoHome = TabNavigator({
           backgroundColor: 'rgba(33,37,101,0.7)',
         },
         tabStyle: {
-          width:200,
-          
+          width:200,  
         }
     },
   });

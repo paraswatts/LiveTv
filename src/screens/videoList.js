@@ -23,9 +23,8 @@ var { height, width } = Dimensions.get('window');
 export default class VideoList extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: `Videos`,
-    headerLeft: (
-      <TouchableOpacity onPress={() => navigation.goBack()}><Icon
+     headerLeft: (  
+      <TouchableOpacity onPress={() =>  navigation.goBack(null)}><Icon
         name='navigate-before'
         style={{
           marginLeft: 10
@@ -33,7 +32,7 @@ export default class VideoList extends Component {
         size={40}
         color={'white'} /></TouchableOpacity>
     )
-  });
+  });               
 
   constructor(props) {
     super(props)

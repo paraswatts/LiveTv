@@ -24,12 +24,8 @@ import ImageView from './imageView';
 import YoutubePlaylist from './youtubePlaylist';
 import VudioList from './videoList';
 import VideoHome from './videoHomePage';
-
-
-
 import getSlideFromRightTransition from 'react-navigation-slide-from-right-transition';
-
-                                                        
+                                                   
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
     android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
@@ -158,11 +154,10 @@ const AppNavigator = StackNavigator({
         }
         )
     },
-
     VideoHome: {
         screen: VideoHome,
         navigationOptions: () => ({
-            title: 'Youtube Playlists',
+            title: 'Youtube ',
             headerStyle: { backgroundColor: '#191565' },
             headerTintColor: '#FFF',
         }
