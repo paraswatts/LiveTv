@@ -108,16 +108,8 @@ export default class Gallery extends Component {
         try {
             const { navigate } = this.props.navigation;
             return (
-                <View style={{ flexDirection: 'column' }}>
-                    <TouchableOpacity style={{
-                        backgroundColor: '#191565',
-                        width: width - 40,
-                        height: 50,
-                        marginTop: 20,
-                        marginRight: 10,
-                        marginLeft: 10,
-                        borderRadius: 10
-                    }}
+                <View style={{ width:width*0.90,elevation: 10, flex: 8, backgroundColor: "#191565",marginTop:10,marginLeft:10,marginRight:10,marginBottom:10 ,borderRadius:5}}>
+                    <TouchableOpacity 
                         onPress={() => {
                             navigate('AlbumView', { id: itemData.item.id, title: itemData.item.title })
                         }}
@@ -151,6 +143,7 @@ export default class Gallery extends Component {
             return (
                 <View style={styles.container}>
                     <FlatList
+                        style={{ marginLeft: 5, marginRight: 5,marginTop:10,marginBottom:5 }}
                         showsVerticalScrollIndicator={false}
                         data={this.state.categories}
                         renderItem={this._renderItem}

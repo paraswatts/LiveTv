@@ -17,6 +17,7 @@ import { TabNavigator } from 'react-navigation';
 
 import YoutubePlaylist from './youtubePlaylist';
 import VideoList from './videoList';
+var { height, width } = Dimensions.get('window');
 
 
 const VideoHome = TabNavigator({
@@ -24,7 +25,7 @@ const VideoHome = TabNavigator({
     VideoList: {
         screen: VideoList,
         navigationOptions: () => ({
-          title: 'Videos',
+          title: 'All Videos',
           headerStyle: { backgroundColor: '#191565' },
           headerTintColor: '#FFF',
       })
@@ -44,7 +45,9 @@ const VideoHome = TabNavigator({
     tabBarPosition: 'top',
     animationEnabled: true,  
     backBehavior:'none',               
-    tabBarOptions: {
+    tabBarOptions: {      
+      pressOpacity:0.5,
+      upperCaseLabel: false,                                                              
       activeBackgroundColor:'#ffffff',
         activeTintColor: '#ffffff',
         inactiveTintColor: '#c8cace',
@@ -53,10 +56,10 @@ const VideoHome = TabNavigator({
         indicatorStyle: {                                 
           borderBottomColor: '#191565',
           borderBottomWidth: 4,
-        },                            
+        },
         pressColor:'rgba(33,37,101,0.7)',                       
         labelStyle:{                                       
-          fontSize: 12,
+          fontSize: 15,
           justifyContent: 'center',
           alignItems: 'center',
         },
@@ -64,7 +67,7 @@ const VideoHome = TabNavigator({
           backgroundColor: 'rgba(33,37,101,0.7)',
         },
         tabStyle: {
-          width:200,  
+          width:width/2,  
         }
     },
   });

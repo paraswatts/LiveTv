@@ -189,6 +189,7 @@ render() {
         style={{ marginLeft: 10, marginRight: 10, marginBottom: 10 }}
         refreshControl={
           <RefreshControl
+            colors={["red", "green", "blue"]}     
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
           />} style={{ flex: 1 }}

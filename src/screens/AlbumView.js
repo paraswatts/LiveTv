@@ -112,8 +112,8 @@ export default class AlbumView extends Component {
             var items = this.state.posts;
             var index = items.indexOf(itemData.item);
             return (
-                <View style={{ flex: 1, flexDirection: 'column', marginTop: 10, borderRadius: 10 }}>
-                    <TouchableOpacity style={{ width: (width * 46.5) / 100, backgroundColor: '#191565', borderRadius: 10, height: 250 }}
+                <View style={{width: width * 0.40, backgroundColor: '#191565', height: 250, elevation:10,flexDirection: 'column', marginTop: 10, marginTop:10,marginLeft:10,marginBottom:10,borderRadius: 10 }}>
+                    <TouchableOpacity 
                         onPress={() => {
                             console.log("Album name",itemData.item.title);
                             navigate('GalleryView', { albumIndex: itemData.item.attachments,title:itemData.item.title })
@@ -153,7 +153,7 @@ export default class AlbumView extends Component {
                 <View style={styles.container}>
                     <FlatList
                         numColumns='2'
-                        style={{ marginBottom: 10, marginLeft: 10 }}
+                        style={{ marginBottom: 10,marginTop:5 ,marginLeft: 5, marginRight: 5,}}
                         showsVerticalScrollIndicator={false}
                         data={this.state.posts}
                         renderItem={this._renderItem}

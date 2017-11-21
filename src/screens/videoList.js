@@ -244,6 +244,7 @@ export default class VideoList extends Component {
         <FlatList
           refreshControl={
             <RefreshControl
+              colors={["red", "green", "blue"]}            
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh.bind(this)}
             />}

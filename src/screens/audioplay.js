@@ -27,13 +27,14 @@ export default class AudioPlay extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      playing: false,
+    this.state = {                                                
+      playing: true,
       muted: false,
       shuffle: false,
       sliding: false,
       currentTime: 0,
       songIndex: 0,
+      songsArray:[]
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -45,6 +46,7 @@ export default class AudioPlay extends Component {
   });
 
   componentWillUnmount() {
+
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
@@ -54,7 +56,12 @@ export default class AudioPlay extends Component {
   }
 
   componentWillMount() {
-    {
+  {
+      const { params }   = this.props.navigation.state;
+      const tempData = params.item;
+      this.setState({songsArray:params.item},()=>{
+        console.log("songs array"+this.state.songsArray)
+      })
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       this._SongIndex()
     }
@@ -62,6 +69,7 @@ export default class AudioPlay extends Component {
 
   _SongIndex() {
     const { params } = this.props.navigation.state;
+    //console.log('song index'+params.songIndex)
     return (
       this.setState({ songIndex: params.songIndex })
     )
@@ -110,6 +118,7 @@ export default class AudioPlay extends Component {
   goForward() {
     NetInfo.isConnected.fetch().then(isConnected => {
       if (isConnected) {
+        console.log('audio ')
         this.setState({
           songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
           currentTime: 0,
@@ -157,8 +166,13 @@ export default class AudioPlay extends Component {
   }
 
   render() {
+    
     const { params } = this.props.navigation.state;
-    let songPlaying = params.item.songs[this.state.songIndex];
+    const tempData = params.item;
+    
+    //console.log(params.item)                                 
+    let songPlaying = params.item[this.state.songIndex];              
+        console.log("Song playing",songPlaying +""+this.state.songIndex)
     let songPercentage;
     if (this.state.songDuration !== undefined) {
       songPercentage = this.state.currentTime / this.state.songDuration;
@@ -175,12 +189,14 @@ export default class AudioPlay extends Component {
 
     let forwardButton;
     if (!this.state.shuffle && this.state.songIndex + 1 === params.songs.length) {
+      console.log("forward if")
       forwardButton = <Icon style={styles.forward} name="skip-next" size={25} color="#333" />;
     } else {
+      console.log("forward else")
       forwardButton = <Icon onPress={this.goForward.bind(this)} style={styles.forward} name="skip-next" size={25} color="#fff" />;
     }
 
-    let volumeButton;
+    let volumeButton;                 
     if (this.state.muted) {
       volumeButton = <Icon onPress={this.toggleVolume.bind(this)} style={styles.volume} name="volume-off" size={18} color="#fff" />;
     } else {
@@ -192,9 +208,9 @@ export default class AudioPlay extends Component {
       shuffleButton = <Icon onPress={this.toggleShuffle.bind(this)} style={styles.shuffle} name="shuffle" size={18} color="#191565" />;
     } else {
       shuffleButton = <Icon onPress={this.toggleShuffle.bind(this)} style={styles.shuffle} name="shuffle" size={18} color="#fff" />;
-    }
-
-    let image = songPlaying.albumImage ? songPlaying.albumImage : params.item.background;
+    }               
+                  
+    let image = params.image;
     return (
       <View style={styles.container}>
         <Video source={{ uri: songPlaying.url }}
@@ -202,11 +218,11 @@ export default class AudioPlay extends Component {
           volume={this.state.muted ? 0 : 1.0}
           muted={false}
           paused={!this.state.playing}
-          onLoad={this.onLoad.bind(this)}
+          onLoad={this.onLoad.bind(this)}                                                   
           onProgress={this.setTime.bind(this)}
           onEnd={this.onEnd.bind(this)}
           resizeMode="cover"
-          repeat={false} />
+          repeat={false} />                                                       
 
         <View style={styles.header}>
           <Text style={styles.headerText}>
@@ -224,9 +240,9 @@ export default class AudioPlay extends Component {
         <Text style={styles.songTitle}>
           {songPlaying.title}
         </Text>
-        <Text style={styles.albumTitle}>
+        {/* <Text style={styles.albumTitle}>            
           {songPlaying.album}
-        </Text>
+        </Text> */}
         <View style={styles.sliderContainer}>
           <Slider
             onSlidingStart={this.onSlidingStart.bind(this)}

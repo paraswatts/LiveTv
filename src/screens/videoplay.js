@@ -56,7 +56,7 @@ export default class VideoPlay extends Component {
           onError={e => this.setState({ error: e.error })}
           style={{ alignSelf: 'stretch', height: 250 }}
         />
-      </View>
+      </View>                       
     );
   }
 }
