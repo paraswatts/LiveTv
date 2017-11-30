@@ -12,8 +12,7 @@ import {
   TouchableHighlight,
   FlatList,
   NetInfo,
-  RefreshControl            
-
+  RefreshControl           
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
 
@@ -31,31 +30,40 @@ export default class AudioList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [],
+      posts: [],                                                          
       isLoading: true,
       title: null,
-      refreshing: false
+      refreshing: false,
+      networkType:null,
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (<TouchableOpacity onPress={() => navigation.goBack()}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
-  });
+  });                             
 
-  componentDidMount() {
+  componentWillMount() {
+    this.getData(); 
+    
+    console.log("I am in audio list")
     Orientation.lockToPortrait(); //this will lock the view to Portrait
-    NetInfo
-        .isConnected
-        .fetch()
-        .then(isConnected => {
-            if (isConnected) {
-                this.getData();
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
+}
 
-            } else {
-                Toast.show('Oops no internet connection !', Toast.SHORT);
-            }
-        });  }
+
+  _handleNetworkStateChange = (networkType) => {
+    console.log("network type"+networkType.type);                               
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      console.log("I am in else")
+    }
+  }
   getData() {
     return fetch('http://parmeshar.tv/api/get_post/?id=1085&order_by=post_date')
         .then((response) => response.json()).then((responseJson) => {
@@ -69,11 +77,11 @@ export default class AudioList extends Component {
             console.error(error);
         });
 }
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
+
 
   componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+    
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
@@ -99,8 +107,14 @@ export default class AudioList extends Component {
      
           <TouchableHighlight onPress={() => {
             console.log('index of song',index)
-            //navigate('AudioPlay', { songIndex: parseInt(rowId), item: params.item, songs: params.item.songs, image: params.item.background, artist: params.item })
+            if(this.state.networkType == 'none')
+            {
+              Toast.show('Oops no internet connection !', Toast.SHORT);                                             
+            }
+            else
+            {
             navigate('AudioPlay',{ songIndex: index, item: this.state.posts, songs: itemData.item, image: url, artist: itemData.item })            
+            }
           }}>
             <View style={styles.song}>
               <Text style={styles.songTitle}>

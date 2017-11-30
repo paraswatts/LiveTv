@@ -41,17 +41,36 @@ export default class YoutubePlaylist extends Component {
       isLoading: false,
       pageToken: null,
       page: 'one',
-      refreshing: false
+      refreshing: false,
+      networkType:null
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentWillMount() {
+    Orientation.lockToPortrait(); 
+    NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
+    
+    this.getData();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+    
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  _handleNetworkStateChange = (networkType) => {
+    console.log("network type"+networkType.type);                               
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      console.log("I am in else")
+    }
   }
 
   handleBackButtonClick() {
@@ -60,17 +79,8 @@ export default class YoutubePlaylist extends Component {
   }
 
   componentDidMount() {
-    Orientation.lockToPortrait(); 
-    NetInfo
-      .isConnected
-      .fetch()
-      .then(isConnected => {
-        if (isConnected) {
-          this.getData();
-        } else {
-          Toast.show('Oops no internet connection !', Toast.SHORT);
-        }
-      });
+   
+       
   }
 
   getData() {
@@ -110,11 +120,11 @@ export default class YoutubePlaylist extends Component {
             }}
             activeOpacity={.5}
             onPress={() => {
-              NetInfo
-                .isConnected
-                .fetch()
-                .then(isConnected => {
-                  if (isConnected) {
+              if(this.state.networkType == 'none')
+              {
+                Toast.show('Oops no internet connection !', Toast.SHORT);
+              }
+              else{
                     if (itemData.item.contentDetails.itemCount > 0) {
                       navigate("PlaylistVideo", {
                         playlistId: itemData.item.id,
@@ -125,10 +135,8 @@ export default class YoutubePlaylist extends Component {
                       Toast.show('Playlist is empty', Toast.SHORT);
                     }
 
-                  } else {
-                    Toast.show('Oops no internet connection !', Toast.SHORT);
-                  }
-                });                                 
+                  } 
+                                                 
             }}>
             <Image
               style={{

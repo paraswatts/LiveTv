@@ -50,37 +50,41 @@ export default class Gallery extends Component {
         this.state = {
             categories: [],
             isLoading: true,
-            title: null
+            title: null,
+            networkType:null
+            
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentWillMount() {
+        Orientation.lockToPortrait(); //this will lock the view to Portrait
+        NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)        
+        this.getData();
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentWillUnmount() {
+        NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+        
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    _handleNetworkStateChange = (networkType) => {
+        console.log("network type"+networkType.type);                               
+        this.setState({networkType:networkType.type});
+        if(networkType.type == 'none'){
+          Toast.show('Oops no internet connection !', Toast.SHORT);                               
+          console.log(networkType.type);
+        }
+        else{
+          console.log("I am in else")
+        }
     }
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
-    }
-
-    componentDidMount() {
-        Orientation.lockToPortrait(); //this will lock the view to Portrait
-        NetInfo
-            .isConnected
-            .fetch()
-            .then(isConnected => {
-                if (isConnected) {
-                    this.getData();
-
-                } else {
-                    Toast.show('Oops no internet connection !', Toast.SHORT);
-                }
-            });
     }
 
     handleBackButton = () => {
@@ -111,7 +115,13 @@ export default class Gallery extends Component {
                 <View style={{ width:width*0.90,elevation: 10, flex: 8, backgroundColor: "#191565",marginTop:10,marginLeft:10,marginRight:10,marginBottom:10 ,borderRadius:5}}>
                     <TouchableOpacity 
                         onPress={() => {
+                            if(this.state.networkType == 'none')
+                            {
+                                Toast.show('Oops no internet connection !', Toast.SHORT);                                                               
+                            }
+                            else{
                             navigate('AlbumView', { id: itemData.item.id, title: itemData.item.title })
+                            }
                         }}
                     >
                         <Text style={{ padding: 10, fontSize: 20, color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>{itemData.item.title}</Text>

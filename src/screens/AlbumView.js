@@ -46,7 +46,8 @@ export default class AlbumView extends Component {
         this.state = {
             attachments: [],
             posts: [],
-            isLoading: true
+            isLoading: true,
+            networkType:null
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -68,30 +69,36 @@ export default class AlbumView extends Component {
     });
 
     componentWillMount() {
+        NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)        
+        
+        this.getData();
+        
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentWillUnmount() {
+        NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+        
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    _handleNetworkStateChange = (networkType) => {
+        console.log("network type"+networkType.type);                               
+        this.setState({networkType:networkType.type});
+        if(networkType.type == 'none'){
+          Toast.show('Oops no internet connection !', Toast.SHORT);                               
+          console.log(networkType.type);
+        }
+        else{
+          console.log("I am in else")
+        }
     }
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
     }
-    componentDidMount() {
-        NetInfo
-            .isConnected
-            .fetch()
-            .then(isConnected => {
-                if (isConnected) {
-                    this.getData();
 
-                } else {
-                    Toast.show('Oops no internet connection !', Toast.SHORT);
-                }
-            });
-    }
 
     getData() {
         const { params } = this.props.navigation.state;
@@ -111,16 +118,21 @@ export default class AlbumView extends Component {
             const { navigate } = this.props.navigation;
             var items = this.state.posts;
             var index = items.indexOf(itemData.item);
-            return (
-                <View style={{width: width * 0.40, backgroundColor: '#191565', height: 250, elevation:10,flexDirection: 'column', marginTop: 10, marginTop:10,marginLeft:10,marginBottom:10,borderRadius: 10 }}>
+            return (                        
+                <View style={{width: width * 0.445, backgroundColor: '#191565', height: 250, elevation:10,flexDirection: 'column', marginTop: 10, marginRight:5,marginLeft:10,marginBottom:10,borderRadius: 10 }}>
                     <TouchableOpacity 
                         onPress={() => {
-                            console.log("Album name",itemData.item.title);
+                            if(this.state.networkType == 'none')
+                            {
+                                Toast.show('Oops no internet connection !', Toast.SHORT);                               
+                            }
+                            else{
                             navigate('GalleryView', { albumIndex: itemData.item.attachments,title:itemData.item.title })
-                        }}
+                            }
+                        }}                                          
                     >
                         <Image
-                            source={{ uri: itemData.item.attachments[0].images.medium.url }} style={{ width: (width * 46.5) / 100, height: 170, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}></Image>
+                            source={{ uri: itemData.item.attachments[0].images.medium.url }} style={{ width: (width * 0.445), height: 170, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}></Image>
                         <Text style={{ margin: 10, fontSize: 15, color: '#fff', textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>{itemData.item.title}</Text>
                     </TouchableOpacity>
                 </View>

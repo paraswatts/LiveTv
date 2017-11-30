@@ -45,30 +45,35 @@ export default class PlaylistVideo extends Component {
       page: 'one',
       refreshing: false,
       itemCount: null,
+      networkType:null
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
-  componentDidMount() {
-    Orientation.lockToPortrait(); //this will lock the view to Portrait
-    NetInfo
-      .isConnected
-      .fetch()
-      .then(isConnected => {
-        if (isConnected) {
-          this.getData();
-        } else {
-          Toast.show('Oops no internet connection !', Toast.SHORT);
-        }
-      });
-  }
 
   componentWillMount() {
+    Orientation.lockToPortrait(); //this will lock the view to Portrait
+    NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
+    this.getData();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+    
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  _handleNetworkStateChange = (networkType) => {
+    console.log("network type"+networkType.type);                               
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      console.log("I am in else")
+    }
   }
 
   handleBackButtonClick() {
@@ -157,17 +162,12 @@ export default class PlaylistVideo extends Component {
               }}
               activeOpacity={.5}
               onPress={() => {
-                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-                NetInfo
-                  .isConnected
-                  .fetch()
-                  .then(isConnected => {
-                    if (isConnected) {
-                      navigate("VideoPlay", { videoid: itemData.item.snippet.resourceId.videoId })
-                    } else {
-                      Toast.show('Oops no internet connection !', Toast.SHORT);
-                    }
-                  });
+                if(this.state.networkType == 'none')
+                {
+                  Toast.show('Oops no internet connection !', Toast.SHORT);
+                } else {
+                  navigate("VideoPlay", { videoid: itemData.item.snippet.resourceId.videoId })                  
+                }
               }}>
               <Image
                 style={{

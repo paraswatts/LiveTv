@@ -41,6 +41,7 @@ export default class GalleryView extends Component {
         this.state = {
             data: [],
             isLoading: true,
+            networkType:null
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -58,16 +59,33 @@ export default class GalleryView extends Component {
     });
 
     componentWillMount() {
+        NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)        
+        
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentWillUnmount() {
+        NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+        
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
+    }
+
+
+    _handleNetworkStateChange = (networkType) => {
+        console.log("network type"+networkType.type);                               
+        this.setState({networkType:networkType.type});
+        if(networkType.type == 'none'){
+          Toast.show('Oops no internet connection !', Toast.SHORT);                               
+          console.log(networkType.type);
+        }
+        else{
+          console.log("I am in else")
+        }
     }
 
     componentDidMount() {
@@ -87,7 +105,15 @@ export default class GalleryView extends Component {
                         <TouchableOpacity
                             style={{borderRadius:5}}
                             onPress={() => {
+                                if(this.state.networkType)
+                                {
+                                    Toast.show('Oops no internet connection !', Toast.SHORT);                               
+                                    
+                                }
+                                else
+                                {
                                 navigate('ImageView', { image: itemData.item.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
+                                }
                             }}
                         >                                                   
                             <Image 

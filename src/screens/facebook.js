@@ -42,19 +42,27 @@ export default class FacebookPage extends Component {
     headerLeft: (<TouchableOpacity onPress={() => navigation.navigate('LoginPage', { index: 1 })}><Icon name='navigate-before' style={{ marginLeft: 10 }} size={40} color={'white'} /></TouchableOpacity>)
   });
 
-  componentDidMount() {
+  componentWillMount() {
+    this.getCoverPicture();
+    this.getFbLink();
     Orientation.lockToPortrait(); //this will lock the view to Portrait
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (isConnected) {
-        this.getCoverPicture();
-        this.getFbLink();
-      }
-      else {
-        Toast.show('Oops no internet connection !', Toast.SHORT);
-      }
-    });
+    NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+                                                                                      
     if (Platform.OS == "android") {
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+  }
+
+  _handleNetworkStateChange = (networkType) => {
+    console.log(networkType);
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      
     }
   }
 
@@ -64,11 +72,9 @@ export default class FacebookPage extends Component {
     return true;
   }
 
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
 
   componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
@@ -94,7 +100,8 @@ export default class FacebookPage extends Component {
       FBLink: null,
       TotalLikes: null,
       isLoading: true,
-      refreshing: false
+      refreshing: false,
+      networkType:null
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 

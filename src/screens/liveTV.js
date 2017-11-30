@@ -31,31 +31,43 @@ export default class LiveTV extends Component {
     this.state = {
       attachments: [],
       videoId: null,
-      isLoading: true
+      isLoading: true,
+      networkType:null
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
-                          
+                                              
   getData() {
     const { params } = this.props.navigation.state;
     return fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E&channelId=UCswIOlMY2_DT05glwBsxZyg&part=snippet,id&order=date&maxResults=20&eventType=live&type=video')
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("response+++++++" + responseJson.items[0].id.videoId)
+        //console.log("response+++++++" + responseJson.items[0].id.videoId)
+        if(responseJson.items[0])
+        {
         this.setState({
           videoId: responseJson.items[0].id.videoId,
           isLoading: false
         });
+      }
+      else{
+        Toast.show('No Live Stream Available', Toast.SHORT);
+        
+      }
       }).catch((error) => {
         console.error(error);
       });
   }                       
 
   componentWillMount() {
+    NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
+    
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)
+    
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
@@ -65,17 +77,7 @@ export default class LiveTV extends Component {
   }
 
   componentDidMount() {
-    NetInfo
-      .isConnected
-      .fetch()
-      .then(isConnected => {
-        if (isConnected) {
-          this.getData();
-
-        } else {
-          Toast.show('Oops no internet connection !', Toast.SHORT);
-        }
-      });
+    
     Orientation.lockToPortrait(); 
     if (Platform.OS == "android") {
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
@@ -87,6 +89,17 @@ export default class LiveTV extends Component {
     navigate('LoginPage')
     return true;
   }
+  _handleNetworkStateChange = (networkType) => {
+    console.log(networkType);
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      this.getData();      
+    }
+  }
 
   render() {
     try {
@@ -94,14 +107,20 @@ export default class LiveTV extends Component {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(33,37,101,0.7)' }}>
           <TouchableOpacity style={{ position: 'absolute' }} activeOpacity={0.5} onPress={() => {
-            NetInfo.isConnected.fetch().then(isConnected => {
-              if (isConnected) {
-                navigate('LivePage', { videoId: this.state.videoId })
-              }
-              else {
+            
+              if (this.state.networkType == 'none') {
+                                                
                 Toast.show('Oops no internet connection !', Toast.SHORT);
               }
-            });
+              else {
+                if(this.state.videoId != null)
+                {
+                  navigate('LivePage', { videoId: this.state.videoId })
+                } 
+                else{
+                  Toast.show('No Live Stream Available', Toast.SHORT);                  
+                }
+              }
           }} >
             <View style={styles.container}>
               <Image style={{ width: width - 250, height: width - 250 }} 

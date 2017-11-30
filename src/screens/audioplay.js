@@ -34,10 +34,11 @@ export default class AudioPlay extends Component {
       sliding: false,
       currentTime: 0,
       songIndex: 0,
-      songsArray:[]
+      songsArray:[],
+      networkType:null
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-  }
+  }     
 
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (<TouchableOpacity onPress={() => {
@@ -46,10 +47,24 @@ export default class AudioPlay extends Component {
   });
 
   componentWillUnmount() {
-
+    NetInfo.removeEventListener('connectionChange',this._handleNetworkStateChange)    
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
+  _handleNetworkStateChange = (networkType) => {
+    console.log(networkType);
+    this.setState({networkType:networkType.type});
+    if(networkType.type == 'none'){
+      this.setState({ playing: false});
+      Toast.show('Oops no internet connection !', Toast.SHORT);                               
+      console.log(networkType.type);
+    }
+    else{
+      this.setState({ playing: true});
+      
+    }
+    
+  }
   handleBackButtonClick() {
     this.props.navigation.goBack(null);
     return true;
@@ -62,6 +77,7 @@ export default class AudioPlay extends Component {
       this.setState({songsArray:params.item},()=>{
         console.log("songs array"+this.state.songsArray)
       })
+      NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)      
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       this._SongIndex()
     }
@@ -76,14 +92,13 @@ export default class AudioPlay extends Component {
   }
 
   togglePlay() {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (isConnected) {
+    if(this.state.networkType == 'none')
+    {
+      Toast.show('Oops no internet connection !', Toast.LONG);      
+    }
+    else{
         this.setState({ playing: !this.state.playing });
-      }
-      else {
-        Toast.show('Oops no internet connection !', Toast.LONG);
-      }
-    });
+    }
   }
 
   toggleVolume() {
@@ -95,8 +110,11 @@ export default class AudioPlay extends Component {
   }
 
   goBackward() {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (isConnected) {
+    if(this.state.networkType == 'none')
+    {
+      Toast.show('Oops no internet connection !', Toast.LONG);      
+    }
+    else{
         if (this.state.currentTime < 3 && this.state.songIndex !== 0) {
           this.setState({
             songIndex: this.state.songIndex - 1,
@@ -109,15 +127,15 @@ export default class AudioPlay extends Component {
           });
         }
       }
-      else {
-        Toast.show('Oops no internet connection !', Toast.LONG);
-      }
-    });
+     
   }
 
   goForward() {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (isConnected) {
+    if(this.state.networkType == 'none')
+    {
+      Toast.show('Oops no internet connection !', Toast.LONG);      
+    }
+    else{
         console.log('audio ')
         this.setState({
           songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
@@ -125,10 +143,7 @@ export default class AudioPlay extends Component {
         });
         this.refs.audio.seek(0);
       }
-      else {
-        Toast.show('Oops no internet connection !', Toast.LONG);
-      }
-    });
+
   }
 
   randomSongIndex() {
@@ -181,13 +196,16 @@ export default class AudioPlay extends Component {
     }
 
     let playButton;
+   
     if (this.state.playing) {
+      
       playButton = <Icon onPress={() => this.togglePlay()} style={styles.play} name="pause" size={70} color="#fff" />;
     } else {
       playButton = <Icon onPress={() => this.togglePlay()} style={styles.play} name="play-arrow" size={70} color="#fff" />;
     }
 
     let forwardButton;
+    
     if (!this.state.shuffle && this.state.songIndex + 1 === params.songs.length) {
       console.log("forward if")
       forwardButton = <Icon style={styles.forward} name="skip-next" size={25} color="#333" />;
@@ -195,6 +213,7 @@ export default class AudioPlay extends Component {
       console.log("forward else")
       forwardButton = <Icon onPress={this.goForward.bind(this)} style={styles.forward} name="skip-next" size={25} color="#fff" />;
     }
+
 
     let volumeButton;                 
     if (this.state.muted) {
