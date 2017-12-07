@@ -42,16 +42,17 @@ export default class LiveTV extends Component {
     return fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyCCHuayCrwwcRAUZ__zTYyOP-ax5FD4R9E&channelId=UCswIOlMY2_DT05glwBsxZyg&part=snippet,id&order=date&maxResults=20&eventType=live&type=video')
       .then((response) => response.json())
       .then((responseJson) => {
-        //console.log("response+++++++" + responseJson.items[0].id.videoId)
+        console.log("response+++++++ Video Id" + responseJson.items[0].id.videoId)
         if(responseJson.items[0])
-        {
+        { 
         this.setState({
           videoId: responseJson.items[0].id.videoId,
           isLoading: false
-        });
+        });                       
       }
       else{
-        Toast.show('No Live Stream Available', Toast.SHORT);
+
+        Toast.show(' Stream Available', Toast.SHORT);
         
       }
       }).catch((error) => {
@@ -60,6 +61,8 @@ export default class LiveTV extends Component {
   }                       
 
   componentWillMount() {
+    this.getData();      
+    
     NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)
     
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -90,6 +93,7 @@ export default class LiveTV extends Component {
     return true;
   }
   _handleNetworkStateChange = (networkType) => {
+    
     console.log(networkType);
     this.setState({networkType:networkType.type});
     if(networkType.type == 'none'){
@@ -97,7 +101,7 @@ export default class LiveTV extends Component {
       console.log(networkType.type);
     }
     else{
-      this.getData();      
+      console.log("getting data");                            
     }
   }
 
@@ -113,13 +117,10 @@ export default class LiveTV extends Component {
                 Toast.show('Oops no internet connection !', Toast.SHORT);
               }
               else {
-                if(this.state.videoId != null)
-                {
+                
                   navigate('LivePage', { videoId: this.state.videoId })
-                } 
-                else{
-                  Toast.show('No Live Stream Available', Toast.SHORT);                  
-                }
+                
+               
               }
           }} >
             <View style={styles.container}>

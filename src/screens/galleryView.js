@@ -17,12 +17,14 @@ import {
     BackHandler,
     Dimensions,
     ActivityIndicator,
+    RefreshControl,
     FlatList
 } from 'react-native';
 var Spinner = require('react-native-spinkit');
 import Orientation from 'react-native-orientation-locker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 var { height, width } = Dimensions.get('window');
 import ProgressPie from 'react-native-progress/Pie';
@@ -41,7 +43,8 @@ export default class GalleryView extends Component {
         this.state = {
             data: [],
             isLoading: true,
-            networkType:null
+            networkType:null,
+            image:null
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -59,6 +62,9 @@ export default class GalleryView extends Component {
     });
 
     componentWillMount() {
+        const { params } = this.props.navigation.state;
+        console.log("param index"+params.albumIndex[0].images.full.url)                    
+                this.setState({image:params.albumIndex[0].images.full.url})
         NetInfo.addEventListener('connectionChange',this._handleNetworkStateChange)        
         
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -97,7 +103,7 @@ export default class GalleryView extends Component {
     _keyExtractor = (itemData, index) => index;
 
     _renderItem = (itemData) => {
-        try {
+   
             const { navigate } = this.props.navigation;
             if (itemData.item.url) {
                 return (
@@ -112,46 +118,62 @@ export default class GalleryView extends Component {
                                 }
                                 else
                                 {
-                                navigate('ImageView', { image: itemData.item.url, pageNo: 'three', width: itemData.item.images.medium_large.width, height: itemData.item.images.medium_large.height })
+                                    this.setState({image:itemData.item.images.full.url});
                                 }
                             }}
                         >                                                   
-                            <Image 
-                                onLoadEnd={()=>{
-                                       this.setState({isLoading:false},()=>{
-                                       });  
-                                }}
+                            <Image1 
+                                indicator={ProgressPie}
+                                indicatorProps={{
+                                    color: 'rgba(33,37,101,1)}'
+            
+                                }} 
                                 source={{ uri: itemData.item.images.square.url }}
-                                style={{ width: (width * 46.5) / 100, height: (width * 45) / 100, borderRadius:5,alignItems:'center',justifyContent:'center'}} >
-                                <ActivityIndicator 
-                                        style={{alignSelf:'center'}}
-                                        animating={this.state.isLoading}
-                                        color='#191565'
-                                        size='large' />
-                                    
-                                </Image>                                                         
+                                style={{ width: (width * 22) / 100, height: (width * 22) / 100, borderRadius:5,alignItems:'center',justifyContent:'center'}} >     
+                                </Image1>                                                         
                         </TouchableOpacity>
                     </View>
                 );
             }
-        }
-        catch (error) {
-            Toast.show('error fetching data', Toast.LONG);
-        }
+        
     }
 
     render() {
         const { params } = this.props.navigation.state;
         return (
-            <View style={styles.container}>
-                <FlatList
-                    numColumns='2'
-                    style={{ marginBottom: 10, marginLeft: 10 }}
-                    showsVerticalScrollIndicator={false}
+            <View style={{flex:1,height:height,flexDirection:'column',backgroundColor:'rgba(33,37,101,0.5)'}}>                                                                              
+                <View style={{flex:0.85,alignItems:'center',justifyContent:'center'}}>                              
+                <ImageZoom                                              
+                cropWidth={width}                           
+                cropHeight={height}         
+                imageWidth={width}
+                imageHeight={width*0.80}>                                                    
+                <Image1                                                         
+                    indicator={ProgressPie}
+                    indicatorProps={{
+                        color: 'rgba(33,37,101,1)}'
+
+                    }}                                                                                   
+                    style={{ 
+                        alignSelf:'center',                     
+                        
+                        height: width*0.80, width: width }}                                                                               
+                    source={{ uri: this.state.image }} />
+            </ImageZoom>
+            </View>
+                        <View style={{flex:0.15}}>
+                <FlatList                           
+                    horizontal                                                                                                              
+                                                                                        
+                    style={{                        
+                        
+                    }}                                                      
+                    showsHorizontalScrollIndicator={false}
                     data={params.albumIndex}
                     renderItem={this._renderItem}
                     keyExtractor={this._keyExtractor} />
-            </View>
+                    </View>
+            </View>                               
         );
     }
 }
