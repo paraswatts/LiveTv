@@ -11,6 +11,8 @@ import LiveClass from './live';
 import LiveTV from './liveTV';
 import Contact from './contact';
 import FacebookPage from './facebook';
+import AudioWeb from './audioWeb';
+
 import PlaylistVideo from './playlistVideo';
 import VideoPlay from './videoplay';
 import AudioPlay from './audioplay';
@@ -33,6 +35,7 @@ const instructions = Platform.select({
 });
 
 const AppNavigator = StackNavigator({
+  
     LoginPage: {
         screen: Login,
         navigationOptions: () => ({ header: null })
@@ -44,7 +47,6 @@ const AppNavigator = StackNavigator({
             headerStyle: { backgroundColor: '#191565' },
             headerTintColor: '#FFF',
         }),
-
     },
     ContactPage: {
         screen: Contact,
@@ -54,7 +56,6 @@ const AppNavigator = StackNavigator({
             headerTintColor: '#FFF',
         }
         )
-
     },
     FacebookPage: {
         screen: FacebookPage,
@@ -64,7 +65,6 @@ const AppNavigator = StackNavigator({
             headerTintColor: '#FFF',
         }
         )
-
     },
     PlaylistVideo: {                                                        
         screen: PlaylistVideo,
@@ -163,6 +163,15 @@ const AppNavigator = StackNavigator({
         }
         )
     },
+    AudioWeb: {
+        screen: AudioWeb,
+        navigationOptions: () => ({
+            title: 'Shabad Player ',
+            headerStyle: { backgroundColor: '#191565' },
+            headerTintColor: '#FFF',
+        }
+        )
+    }
 },
     {
     

@@ -129,7 +129,7 @@ export default class GalleryView extends Component {
             
                                 }} 
                                 source={{ uri: itemData.item.images.square.url }}
-                                style={{ width: (width * 22) / 100, height: (width * 22) / 100, borderRadius:5,alignItems:'center',justifyContent:'center'}} >     
+                                style={{width: width * 0.22, height: width * 0.22,alignItems:'center',justifyContent:'center'}} >     
                                 </Image1>                                                         
                         </TouchableOpacity>
                     </View>
@@ -142,9 +142,9 @@ export default class GalleryView extends Component {
         const { params } = this.props.navigation.state;
         return (
             <View style={{flex:1,height:height,flexDirection:'column',backgroundColor:'rgba(33,37,101,0.5)'}}>                                                                              
-                <View style={{flex:0.85,alignItems:'center',justifyContent:'center'}}>                              
+                <View style={{flex:0.835,alignItems:'center',justifyContent:'center'}}>                              
                 <ImageZoom                                              
-                cropWidth={width}                           
+                cropWidth={width}                                                                                    
                 cropHeight={height}         
                 imageWidth={width}
                 imageHeight={width*0.80}>                                                    
@@ -154,19 +154,19 @@ export default class GalleryView extends Component {
                         color: 'rgba(33,37,101,1)}'
 
                     }}                                                                                   
-                    style={{ 
+                    style={{                                    
                         alignSelf:'center',                     
                         
                         height: width*0.80, width: width }}                                                                               
                     source={{ uri: this.state.image }} />
             </ImageZoom>
             </View>
-                        <View style={{flex:0.15}}>
+                        <View style={{flex:0.165}}>
                 <FlatList                           
-                    horizontal                                                                                                              
+                    horizontal                                                                                                                                          
                                                                                         
                     style={{                        
-                        
+                    
                     }}                                                      
                     showsHorizontalScrollIndicator={false}
                     data={params.albumIndex}

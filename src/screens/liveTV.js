@@ -43,7 +43,7 @@ export default class LiveTV extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log("response+++++++ Video Id" + responseJson.items[0].id.videoId)
-        if(responseJson.items[0])
+        if(responseJson.items[0].id)                                                                  
         { 
         this.setState({
           videoId: responseJson.items[0].id.videoId,
@@ -52,7 +52,7 @@ export default class LiveTV extends Component {
       }
       else{
 
-        Toast.show(' Stream Available', Toast.SHORT);
+        Toast.show(' Stream Not Available', Toast.SHORT);
         
       }
       }).catch((error) => {
@@ -117,8 +117,15 @@ export default class LiveTV extends Component {
                 Toast.show('Oops no internet connection !', Toast.SHORT);
               }
               else {
-                
-                  navigate('LivePage', { videoId: this.state.videoId })
+                if(this.state.videoId == null)
+                {
+                  Toast.show('Currently no live stream is available', Toast.SHORT);
+
+                }
+                else
+                {
+                                  navigate('LivePage', { videoId: this.state.videoId })
+                }
                 
                
               }

@@ -184,7 +184,6 @@ export default class Login extends Component {
                     fontSize: 20,
                     color: "#FFF"
                   }}>Live TV</Text>
-
               </View>                       
             </View>
             
@@ -284,7 +283,7 @@ export default class Login extends Component {
                       
                     }
                     else{                            
-                    navigate("AudioList")
+                    navigate("AudioWeb")
                     }
                   }}>
                   <Image
